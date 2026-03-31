@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joseph Erzuah — AI/Automation Developer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Courier+Prime:wght@700&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --fg: #f0f0f0;
+            --accent: #ffd700;
+            --secondary: #404040;
+            --border: #1a1a1a;
+            --hover: #1a1a1a;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: 'IBM Plex Mono', monospace;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Background effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                linear-gradient(90deg, rgba(255,215,0,0.03) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(255,215,0,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        /* Header */
+        header {
+            margin-bottom: 80px;
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 40px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--accent);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            margin-top: 15px;
+            line-height: 1.8;
+        }
+
+        /* Contact */
+        .contact-line {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-line a {
+            color: var(--fg);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .contact-line a:hover {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Projects Section */
+        .projects {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .project {
+            border: 1px solid var(--secondary);
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255,215,0,0.02) 0%, rgba(0,0,0,0) 100%);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .project:nth-child(1) { animation-delay: 0.1s; }
+        .project:nth-child(2) { animation-delay: 0.2s; }
+        .project:nth-child(3) { animation-delay: 0.3s; }
+        .project:nth-child(4) { animation-delay: 0.4s; }
+        .project:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project:hover {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(255,215,0,0.05) 0%, rgba(0,0,0,0) 100%);
+            box-shadow: 0 0 20px rgba(255,215,0,0.1);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .project h2 {
+            font-size: 1.4rem;
+            font-family: 'Courier Prime', monospace;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .project-status {
+            font-size: 0.8rem;
+            background: var(--accent);
+            color: var(--bg);
+            padding: 4px 12px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            height: fit-content;
+        }
+
+        .project-description {
+            color: var(--secondary);
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .tech-stack {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .tech-tag {
+            font-size: 0.8rem;
+            border: 1px solid var(--secondary);
+            padding: 4px 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
+        }
+
+        .tech-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .project-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--accent);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .project-link:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        /* Skills Section */
+        .skills-section {
+            margin-bottom: 80px;
+            padding: 40px;
+            border: 1px solid var(--secondary);
+            background: linear-gradient(135deg, rgba(255,215,0,0.01) 0%, rgba(0,0,0,0) 100%);
+        }
+
+        .skills-section h2 {
+            font-size: 1.4rem;
+            font-family: 'Courier Prime', monospace;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .skill-category h3 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .skill-category p {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            line-height: 1.8;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 40px;
+            border: 2px solid var(--accent);
+            background: rgba(255, 215, 0, 0.02);
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-size: 1.6rem;
+            font-family: 'Courier Prime', monospace;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        .cta p {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 12px 30px;
+            background: var(--accent);
+            color: var(--bg);
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border: 2px solid var(--accent);
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background: transparent;
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--secondary);
+            color: var(--secondary);
+            font-size: 0.85rem;
+            margin-top: 80px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            main {
+                padding: 40px 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .project-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-line {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <!-- Header -->
+        <header>
+            <h1>Joseph Erzuah</h1>
+            <div class="subtitle">AI/Automation Developer</div>
+            <p class="tagline">Building intelligent systems, bots, and dashboards for real problems. CS student at UENR. Based in Ghana.</p>
+            <div class="contact-line">
+                <a href="https://github.com/darlingtonerzuah" target="_blank">GitHub</a>
+                <a href="mailto:darlingtonerzuah@gmail.com">Email</a>
+                <a href="https://t.me/your_telegram" target="_blank">Telegram</a>
+            </div>
+        </header>
+
+        <!-- Projects -->
+        <section class="projects">
+            <div class="project">
+                <div class="project-header">
+                    <h2>JARVIS v3.0</h2>
+                    <span class="project-status">Active</span>
+                </div>
+                <p class="project-description">Telegram-based AI PC control bot with natural language processing. Remote keyboard, mouse, file ops, screenshot analysis, webcam capture, system monitoring, security alerts.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">Telegram Bot API</span>
+                    <span class="tech-tag">Groq API</span>
+                    <span class="tech-tag">OpenCV</span>
+                    <span class="tech-tag">tkinter</span>
+                </div>
+                <a href="https://github.com/darlingtonerzuah" class="project-link">View Source →</a>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h2>Ghana Market Pulse</h2>
+                    <span class="project-status">Production</span>
+                </div>
+                <p class="project-description">Full-stack GSE stock prediction app with live scraping, ARIMA models, interactive dashboards, CSV export, and community chat. Real data from Ghana Stock Exchange.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Selenium</span>
+                    <span class="tech-tag">SQLite</span>
+                    <span class="tech-tag">Chart.js</span>
+                    <span class="tech-tag">ARIMA</span>
+                </div>
+                <a href="https://github.com/darlingtonerzuah/gmp-market-predictor" class="project-link">View on GitHub →</a>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h2>Mobile Assistant System</h2>
+                    <span class="project-status">In Development</span>
+                </div>
+                <p class="project-description">Full-stack personal assistant with Flutter mobile app, Python Flask backend, and tkinter desktop panel. JWT authentication, Groq voice processing, file sync, APScheduler.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Flutter</span>
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Python</span>
+                    <span class="tech-tag">JWT Auth</span>
+                    <span class="tech-tag">Groq API</span>
+                </div>
+                <a href="#contact" class="project-link">Hire for Custom Build →</a>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h2>NoteGen</h2>
+                    <span class="project-status">MVP</span>
+                </div>
+                <p class="project-description">AI-powered study notes generator for UENR students. Generates lecture summaries, study guides, and practice questions using Groq API.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">SQLite</span>
+                    <span class="tech-tag">Groq API</span>
+                    <span class="tech-tag">HTML/CSS/JS</span>
+                </div>
+                <a href="https://github.com/darlingtonerzuah/notegen-mvp" class="project-link">View Source →</a>
+            </div>
+
+            <div class="project">
+                <div class="project-header">
+                    <h2>ProControl</h2>
+                    <span class="project-status">Production</span>
+                </div>
+                <p class="project-description">Phone-browser PC remote control system. Full feature set wrapped as Android APK. Auto-starts via Task Scheduler. Control volume, media, apps, and system settings.</p>
+                <div class="tech-stack">
+                    <span class="tech-tag">Flask</span>
+                    <span class="tech-tag">Android Studio</span>
+                    <span class="tech-tag">WebView</span>
+                    <span class="tech-tag">Windows</span>
+                </div>
+                <a href="#contact" class="project-link">Inquire About Custom →</a>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section class="skills-section">
+            <h2>Core Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <p>Python, Flask, FastAPI, REST APIs, SQLite, PostgreSQL, JWT Auth, Web Scraping</p>
+                </div>
+                <div class="skill-category">
+                    <h3>AI/ML</h3>
+                    <p>Groq API, OpenAI Integration, LLM Prompting, OpenCV, Time Series, ARIMA Models</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <p>HTML/CSS/JS, Flask Templates, Chart.js, Responsive Design, Dark Mode</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Mobile/Desktop</h3>
+                    <p>Flutter, Android Studio, tkinter, WebView, Cross-Platform Development</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Automation</h3>
+                    <p>Telegram Bots, WhatsApp Bots, Task Scheduling, Windows Automation, File Ops</p>
+                </div>
+                <div class="skill-category">
+                    <h3>Deployment</h3>
+                    <p>GitHub, Ngrok, Local Hosting, Windows Services, Git/Version Control</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="cta" id="contact">
+            <h2>Let's Build Something</h2>
+            <p>Custom automation, bots, dashboards, or AI integrations. I work on a per-project basis or ongoing maintenance contracts.</p>
+            <a href="mailto:darlingtonerzuah@gmail.com" class="cta-button">Get in Touch</a>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>© 2026 Joseph Erzuah. All projects built from scratch in Ghana. No budget, no excuses.</p>
+        </footer>
+    </main>
+</body>
+</html>
