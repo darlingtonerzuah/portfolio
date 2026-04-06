@@ -819,19 +819,27 @@ const particles = Array.from({length: 120}, () => ({
     alpha: Math.random() * 0.2 + 0.05
 }));
 
+let scrollY = window.scrollY || 0;
+window.addEventListener('scroll', () => {
+    scrollY = window.scrollY;
+});
+
 let t = 0;
 let shootingStarsArray = [];
 function draw() {
     ctx.clearRect(0, 0, W, H);
     t += 0.004;
 
-    // Twinkling stars background
+    // Twinkling stars background (farthest - slowest scroll)
     stars.forEach(s => {
         const shimmer = Math.sin(t * s.twinkleSpeed * 2 + s.twinklePhase) * 0.5 + 0.5;
         const alpha = shimmer * 0.8;
         
+        let sY = (s.y - scrollY * 0.15) % H;
+        if (sY < 0) sY += H;
+        
         ctx.beginPath();
-        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.arc(s.x, sY, s.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(200, 230, 255, ${alpha})`;
         ctx.fill();
     });
@@ -857,26 +865,28 @@ function draw() {
         if (ss.alpha <= 0) {
             shootingStarsArray.splice(i, 1);
         } else {
+            let sy = ss.y - scrollY * 0.15;
+            
             const grad = ctx.createLinearGradient(
-                ss.x, ss.y, 
+                ss.x, sy, 
                 ss.x - Math.cos(ss.angle) * ss.len, 
-                ss.y - Math.sin(ss.angle) * ss.len
+                sy - Math.sin(ss.angle) * ss.len
             );
             grad.addColorStop(0, `rgba(255, 255, 255, ${ss.alpha})`);
             grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
             
             ctx.beginPath();
-            ctx.moveTo(ss.x, ss.y);
+            ctx.moveTo(ss.x, sy);
             ctx.lineTo(
                 ss.x - Math.cos(ss.angle) * ss.len, 
-                ss.y - Math.sin(ss.angle) * ss.len
+                sy - Math.sin(ss.angle) * ss.len
             );
             ctx.lineWidth = 1.5;
             ctx.strokeStyle = grad;
             ctx.stroke();
             
             ctx.beginPath();
-            ctx.arc(ss.x, ss.y, 1.5, 0, Math.PI * 2);
+            ctx.arc(ss.x, sy, 1.5, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(255, 255, 255, ${ss.alpha})`;
             ctx.fill();
         }
@@ -885,15 +895,16 @@ function draw() {
     // Dynamic light rays from top
     for (let i = 0; i < 5; i++) {
         const xPos = W * (0.15 + i * 0.2);
-        const rayGrad = ctx.createLinearGradient(xPos - 150, 0, xPos + 150, H);
+        const rayY = -scrollY * 0.2;
+        const rayGrad = ctx.createLinearGradient(xPos - 150, rayY, xPos + 150, rayY + H);
         rayGrad.addColorStop(0, 'rgba(109, 184, 255, 0.05)');
         rayGrad.addColorStop(0.5, 'rgba(109, 184, 255, 0.02)');
         rayGrad.addColorStop(1, 'rgba(109, 184, 255, 0)');
         ctx.fillStyle = rayGrad;
-        ctx.fillRect(xPos - 150, 0, 300, H);
+        ctx.fillRect(xPos - 150, rayY, 300, H);
     }
 
-    // Multi-layer wave system
+    // Multi-layer wave system (closer - moves faster)
     const waveConfigs = [
         { yBase: 0.18, amp: 42, freq: 0.0035, speed: 0.45, alpha: 0.12, width: 2.5 },
         { yBase: 0.32, amp: 34, freq: 0.0045, speed: 0.6, alpha: 0.10, width: 2.2 },
@@ -904,7 +915,7 @@ function draw() {
 
     waveConfigs.forEach((config, index) => {
         ctx.beginPath();
-        const yBase = H * config.yBase;
+        const yBase = H * config.yBase - scrollY * (0.25 + index * 0.03);
         const speed = t * config.speed;
         
         ctx.moveTo(0, yBase);
@@ -941,17 +952,21 @@ function draw() {
     // Subtle particle shimmer effect
     particles.forEach(p => {
         p.y += Math.sin(t * 2 + p.x * 0.01) * 0.2;
-        if (p.y < 0) p.y = H;
-        if (p.y > H) p.y = 0;
-        if (p.x < 0) p.x = W;
-        if (p.x > W) p.x = 0;
+        // Keep absolute coordinates in bounds
+        if (p.y < 0) p.y += H;
+        if (p.y > H) p.y -= H;
+        if (p.x < 0) p.x += W;
+        if (p.x > W) p.x -= W;
+
+        let pY = (p.y - scrollY * 0.3) % H;
+        if (pY < 0) pY += H;
 
         // Light reflection shimmer
         const shimmer = Math.sin(t * 1.5 + p.x * 0.005) * 0.5 + 0.5;
         const alpha = (Math.random() * 0.15 + 0.05) * shimmer;
         
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.arc(p.x, pY, p.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(109, 184, 255, ${alpha})`;
         ctx.fill();
     });
@@ -959,7 +974,7 @@ function draw() {
     // Animated crest lines
     for (let i = 0; i < 3; i++) {
         ctx.beginPath();
-        const foamY = H * (0.25 + i * 0.25) + Math.sin(t * 0.3 + i) * 8;
+        const foamY = H * (0.25 + i * 0.25) + Math.sin(t * 0.3 + i) * 8 - scrollY * (0.25 + i * 0.03);
         const foamWave = Math.sin(t * 0.2 + i * Math.PI / 1.5) * 40 + 20;
         
         ctx.moveTo(-20, foamY);
