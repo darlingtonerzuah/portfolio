@@ -10,57 +10,38 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
-            --bg: #060608;
-            --fg: #eeeef0;
-            --accent: #ffd700;
-            --accent2: #ff6b00;
-            --dim: #3a3a3a;
-            --dimmer: #1c1c1c;
-            --glow: rgba(255, 215, 0, 0.15);
+            --bg: #040817;
+            --fg: #f5f8ff;
+            --accent: #6db8ff;
+            --accent2: #4e96ff;
+            --dim: rgba(243, 247, 255, 0.72);
+            --dimmer: rgba(255, 255, 255, 0.08);
+            --glow: rgba(109, 184, 255, 0.14);
+            --navy: #e5f2ff;
+            --light: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.08);
         }
 
         html { scroll-behavior: smooth; }
 
         body {
-            background: var(--bg);
+            background: radial-gradient(circle at 50% -10%, rgba(109, 184, 255, 0.08) 0%, transparent 22%),
+                        radial-gradient(circle at 15% 20%, rgba(92, 136, 231, 0.12) 0%, transparent 18%),
+                        radial-gradient(circle at 85% 10%, rgba(68, 105, 196, 0.14) 0%, transparent 16%),
+                        radial-gradient(circle at top, #11224a 0%, #081026 38%, #020611 100%);
+            background-attachment: fixed;
+            background-size: 180% 180%;
+            animation: bgDrift 28s ease-in-out infinite;
             color: var(--fg);
             font-family: 'IBM Plex Mono', monospace;
             line-height: 1.6;
             overflow-x: hidden;
-            cursor: none;
+            min-height: 100vh;
         }
-
-        /* ── CUSTOM CURSOR ── */
-        #cursor {
-            position: fixed;
-            width: 12px; height: 12px;
-            background: var(--accent);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9999;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s;
-            mix-blend-mode: difference;
-        }
-        #cursor-ring {
-            position: fixed;
-            width: 36px; height: 36px;
-            border: 1px solid rgba(255,215,0,0.5);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 9998;
-            transform: translate(-50%, -50%);
-            transition: transform 0.15s ease, width 0.3s, height 0.3s;
-        }
-        body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; }
 
         /* ── CANVAS BACKGROUND ── */
         #bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0;
-            opacity: 0.7;
+            display: none;
         }
 
         /* ── NOISE OVERLAY ── */
@@ -68,26 +49,36 @@
             content: '';
             position: fixed;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.02'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 1;
-            opacity: 0.4;
+            opacity: 0.11;
         }
 
-        /* ── SCANLINES ── */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0,0,0,0.05) 2px,
-                rgba(0,0,0,0.05) 4px
-            );
+            background:
+                radial-gradient(circle at 35% 20%, rgba(109, 184, 255, 0.16), transparent 28%),
+                radial-gradient(circle at 75% 8%, rgba(78, 150, 255, 0.12), transparent 22%),
+                radial-gradient(circle at 50% 0%, rgba(255,255,255,0.16), transparent 40%);
             pointer-events: none;
             z-index: 2;
+            opacity: 0.9;
+            animation: glowShift 24s ease-in-out infinite;
+        }
+
+        @keyframes bgDrift {
+            0%, 100% { background-position: 50% 50%; }
+            50% { background-position: 48% 52%; }
+        }
+
+        @keyframes glowShift {
+            0%, 100% { transform: translate(0, 0); opacity: 0.9; }
+            25% { transform: translate(6px, -8px); opacity: 0.95; }
+            50% { transform: translate(-8px, 6px); opacity: 0.88; }
+            75% { transform: translate(4px, 10px); opacity: 0.92; }
         }
 
         /* ── LAYOUT ── */
@@ -96,90 +87,184 @@
             z-index: 10;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 70px 40px;
+            padding: 0 40px 80px;
         }
+
+        /* ── NAVIGATION ── */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(5, 14, 33, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0 40px;
+        }
+
+        nav-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+
+        .nav-logo { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #f5f8ff; }
+
+        .nav-menu {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(243, 247, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.2s ease;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .nav-menu a:hover { color: #6db8ff; }
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #6db8ff;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        .nav-menu a:hover::after { transform: scaleX(1); }
 
         /* ── HEADER ── */
         header {
+            margin-top: 70px;
             margin-bottom: 100px;
-            padding-bottom: 50px;
-            border-bottom: 1px solid var(--dim);
+            padding: 90px 0 70px;
+            text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .avatar-circle {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            margin: 0 auto 36px;
+            border: 3px solid rgba(109, 184, 255, 0.9);
+            background: radial-gradient(circle, #4c9de9 0%, #005ab8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            font-weight: 700;
+            color: #f5f8ff;
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards 0.1s;
+            box-shadow: 0 18px 38px rgba(0, 85, 156, 0.28);
         }
 
         .header-eyebrow {
             font-size: 0.75rem;
-            color: var(--accent);
+            color: rgba(109, 184, 255, 0.75);
             letter-spacing: 4px;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             opacity: 0;
-            animation: fadeUp 0.6s ease forwards 0.1s;
+            animation: fadeUp 0.6s ease forwards 0.15s;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: 18%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(109, 184, 255, 0.18) 0%, rgba(0, 0, 0, 0) 60%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 1px;
+            background: rgba(109, 184, 255, 0.18);
+            box-shadow: 0 0 28px rgba(109, 184, 255, 0.08);
+            border-radius: 999px;
+            z-index: 1;
         }
 
         h1 {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(3.25rem, 6vw, 5rem);
             font-family: 'Courier Prime', monospace;
             font-weight: 700;
-            letter-spacing: -3px;
+            letter-spacing: -2px;
             text-transform: uppercase;
-            line-height: 0.95;
-            margin-bottom: 24px;
+            line-height: 1.05;
+            margin-bottom: 16px;
             opacity: 0;
-            animation: fadeUp 0.7s ease forwards 0.2s;
+            animation: fadeUp 0.7s ease forwards 0.25s;
+            color: #f5f8ff;
         }
 
         h1 span {
-            color: var(--accent);
+            color: #76b9ff;
             position: relative;
         }
 
-        h1 span::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 3px;
-            background: var(--accent);
-            transform: scaleX(0);
-            transform-origin: left;
-            animation: underlineSlide 0.8s ease forwards 1s;
-        }
-
-        @keyframes underlineSlide { to { transform: scaleX(1); } }
-
         .tagline {
-            font-size: 0.9rem;
-            color: var(--dim);
-            margin-top: 16px;
-            max-width: 560px;
+            font-size: 0.95rem;
+            color: rgba(243, 247, 255, 0.75);
+            margin-top: 18px;
+            max-width: 620px;
             line-height: 1.8;
+            margin-left: auto;
+            margin-right: auto;
             opacity: 0;
-            animation: fadeUp 0.7s ease forwards 0.4s;
+            animation: fadeUp 0.7s ease forwards 0.35s;
         }
 
         .contact-line {
             display: flex;
             gap: 28px;
-            margin-top: 24px;
-            flex-wrap: wrap;
+            margin-top: 32px;
+            justify-content: center;
             opacity: 0;
-            animation: fadeUp 0.7s ease forwards 0.5s;
+            animation: fadeUp 0.7s ease forwards 0.45s;
         }
 
         .contact-line a {
-            color: var(--dim);
+            color: rgba(243, 247, 255, 0.75);
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: color 0.2s;
+            letter-spacing: 2px;
+            transition: color 0.2s ease;
             position: relative;
+            font-weight: 600;
         }
 
         .contact-line a::after {
             content: '';
             position: absolute;
-            bottom: -2px; left: 0; right: 0;
+            bottom: -4px; left: 0; right: 0;
             height: 1px;
             background: var(--accent);
             transform: scaleX(0);
@@ -190,47 +275,97 @@
         .contact-line a:hover { color: var(--accent); }
         .contact-line a:hover::after { transform: scaleX(1); }
 
+        .scroll-hint {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin: 40px auto 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.75rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeUp 0.7s ease forwards 0.55s;
+        }
+
+        .scroll-hint span {
+            width: 1px;
+            height: 34px;
+            background: rgba(109, 184, 255, 0.55);
+            border-radius: 999px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-hint span::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 8px;
+            transform: translateX(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: bounce 1.6s infinite ease-in-out;
+            box-shadow: 0 0 16px rgba(109, 184, 255, 0.45);
+        }
+
+        .scroll-hint p {
+            margin: 0;
+            color: rgba(243, 247, 255, 0.72);
+            letter-spacing: 1.8px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translate(-50%, 0); opacity: 0.35; }
+            50% { transform: translate(-50%, 16px); opacity: 1; }
+        }
+
         /* ── SECTION TITLES ── */
         .section-label {
             font-size: 0.7rem;
-            color: var(--accent);
+            color: rgba(109, 184, 255, 0.88);
             letter-spacing: 4px;
             text-transform: uppercase;
             margin-bottom: 36px;
             display: flex;
             align-items: center;
             gap: 16px;
+            font-weight: 600;
         }
 
         .section-label::after {
             content: '';
             flex: 1;
             height: 1px;
-            background: linear-gradient(90deg, var(--dim), transparent);
+            background: linear-gradient(90deg, rgba(109, 184, 255, 0.7), rgba(78, 150, 255, 0.15));
         }
 
         /* ── PROJECT GRID ── */
         .projects {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
+            gap: 24px;
             margin-bottom: 100px;
-            background: var(--dimmer);
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 900px) {
             .projects { grid-template-columns: 1fr; }
         }
 
         .project {
-            background: var(--bg);
+            background: rgba(7, 17, 39, 0.9);
             padding: 32px 28px;
             position: relative;
             overflow: hidden;
             opacity: 0;
             animation: fadeUp 0.6s ease forwards;
-            transition: background 0.3s;
-            cursor: none;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+            border: 1px solid rgba(109, 184, 255, 0.12);
+            border-radius: 18px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
         }
 
         .project:nth-child(1) { animation-delay: 0.15s; }
@@ -243,12 +378,12 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,215,0,0.04), transparent 60%);
+            background: linear-gradient(135deg, rgba(109, 184, 255, 0.08), transparent 55%);
             opacity: 0;
             transition: opacity 0.4s;
         }
 
-        .project:hover { background: #0e0e10; }
+        .project:hover { transform: translateY(-8px); box-shadow: 0 32px 56px rgba(0, 0, 0, 0.22); }
         .project:hover::before { opacity: 1; }
 
         /* Glitch accent line on left */
@@ -264,39 +399,41 @@
         .project:hover::after { height: 100%; }
 
         .project-num {
-            font-size: 0.65rem;
-            color: var(--dim);
+            font-size: 0.75rem;
+            color: rgba(173, 212, 255, 0.75);
             letter-spacing: 2px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .project h2 {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-family: 'Courier Prime', monospace;
             text-transform: uppercase;
             letter-spacing: -0.5px;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            color: #f5f8ff;
         }
 
         .project-status {
             display: inline-block;
             font-size: 0.65rem;
-            background: var(--accent);
-            color: #000;
-            padding: 2px 10px;
+            background: rgba(109, 184, 255, 0.2);
+            color: #a3d5ff;
+            padding: 4px 12px;
             text-transform: uppercase;
             font-weight: 700;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
+            border-radius: 999px;
         }
 
         .project-status.dev { background: var(--accent2); }
-        .project-status.mvp { background: transparent; border: 1px solid var(--dim); color: var(--dim); }
+        .project-status.mvp { background: transparent; border: 1px solid #a0c5d9; color: #4d7185; }
 
         .project-description {
-            color: var(--dim);
-            font-size: 0.85rem;
-            line-height: 1.75;
+            color: rgba(243, 247, 255, 0.74);
+            font-size: 0.9rem;
+            line-height: 1.8;
             margin-bottom: 18px;
         }
 
@@ -308,18 +445,20 @@
         }
 
         .tech-tag {
-            font-size: 0.7rem;
-            border: 1px solid #282828;
-            padding: 3px 9px;
+            font-size: 0.72rem;
+            border: 1px solid rgba(109, 184, 255, 0.22);
+            padding: 4px 10px;
             text-transform: uppercase;
-            color: #666;
-            letter-spacing: 0.5px;
-            transition: all 0.2s;
+            color: rgba(173, 212, 255, 0.9);
+            letter-spacing: 0.6px;
+            transition: all 0.2s ease;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.04);
         }
 
         .project:hover .tech-tag {
-            border-color: #333;
-            color: #999;
+            border-color: var(--accent);
+            color: var(--accent);
         }
 
         .project-link {
@@ -343,114 +482,58 @@
         .skills-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            background: var(--dimmer);
+            gap: 20px;
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 900px) {
             .skills-grid { grid-template-columns: 1fr 1fr; }
         }
 
         .skill-category {
-            background: var(--bg);
-            padding: 24px 20px;
-            transition: background 0.3s;
+            background: rgba(7, 17, 39, 0.9);
+            padding: 28px 24px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(109, 184, 255, 0.12);
+            border-radius: 20px;
         }
 
-        .skill-category:hover { background: #0d0d0f; }
+        .skill-category:hover { transform: translateY(-8px); box-shadow: 0 26px 45px rgba(0, 0, 0, 0.18); }
 
         .skill-category h3 {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--accent);
             letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 10px;
-            font-weight: 600;
+            margin-bottom: 14px;
+            font-weight: 700;
         }
 
         .skill-category p {
-            font-size: 0.78rem;
-            color: var(--dim);
+            font-size: 0.82rem;
+            color: rgba(243, 247, 255, 0.75);
             line-height: 1.9;
         }
 
-        /* ── TERMINAL WIDGET ── */
-        .terminal-section { margin-bottom: 100px; }
 
-        .terminal {
-            background: #080810;
-            border: 1px solid #1f1f1f;
-            padding: 0;
-            font-size: 0.85rem;
-            overflow: hidden;
-        }
-
-        .terminal-bar {
-            background: #111118;
-            padding: 10px 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            border-bottom: 1px solid #1f1f1f;
-        }
-
-        .dot { width: 10px; height: 10px; border-radius: 50%; }
-        .dot-r { background: #ff5f57; }
-        .dot-y { background: #febc2e; }
-        .dot-g { background: #28c840; }
-        .terminal-title { font-size: 0.7rem; color: #444; margin-left: 8px; letter-spacing: 1px; }
-
-        .terminal-body { padding: 24px 20px; min-height: 160px; }
-        .terminal-line { margin-bottom: 6px; }
-        .t-prompt { color: var(--accent); }
-        .t-cmd { color: #ccc; }
-        .t-out { color: #555; }
-        .t-highlight { color: var(--accent2); }
-        .t-green { color: #4caf50; }
-
-        #terminal-input-line {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 16px;
-        }
-
-        #terminal-input {
-            background: transparent;
-            border: none;
-            outline: none;
-            color: #ccc;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.85rem;
-            flex: 1;
-            caret-color: var(--accent);
-            cursor: none;
-        }
-
-        .blink {
-            display: inline-block;
-            width: 8px; height: 14px;
-            background: var(--accent);
-            animation: blink 1s step-end infinite;
-            vertical-align: middle;
-        }
-        @keyframes blink { 50% { opacity: 0; } }
 
         /* ── CTA ── */
         .cta {
             padding: 50px 40px;
-            border: 1px solid var(--dim);
+            border: 1px solid rgba(109, 184, 255, 0.12);
             position: relative;
             overflow: hidden;
             text-align: center;
             margin-bottom: 60px;
+            background: rgba(7, 17, 39, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 28px 60px rgba(0, 0, 0, 0.2);
         }
 
         .cta::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at center bottom, rgba(255,215,0,0.04), transparent 70%);
+            background: radial-gradient(ellipse at center bottom, rgba(109, 184, 255, 0.08), transparent 70%);
             pointer-events: none;
         }
 
@@ -460,22 +543,27 @@
             text-transform: uppercase;
             letter-spacing: -1px;
             margin-bottom: 12px;
+            color: #f5f8ff;
+            position: relative;
+            z-index: 1;
         }
 
         .cta p {
-            color: var(--dim);
-            font-size: 0.88rem;
+            color: rgba(243, 247, 255, 0.75);
+            font-size: 0.95rem;
             margin-bottom: 28px;
-            max-width: 480px;
+            max-width: 560px;
             margin-left: auto;
             margin-right: auto;
+            position: relative;
+            z-index: 1;
         }
 
         .cta-button {
             display: inline-block;
             padding: 14px 36px;
             background: var(--accent);
-            color: #000;
+            color: #fff;
             text-decoration: none;
             text-transform: uppercase;
             font-weight: 700;
@@ -486,18 +574,20 @@
             transition: all 0.3s;
             position: relative;
             overflow: hidden;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
         }
 
         .cta-button::after {
             content: '';
             position: absolute;
             inset: 0;
-            background: #000;
+            background: #005ab3;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
 
-        .cta-button:hover { color: var(--accent); }
+        .cta-button:hover { color: #fff; box-shadow: 0 6px 16px rgba(0, 102, 204, 0.4); }
         .cta-button:hover::after { transform: translateX(0); }
         .cta-button span { position: relative; z-index: 1; }
 
@@ -505,8 +595,8 @@
         footer {
             text-align: center;
             padding: 30px 0;
-            border-top: 1px solid #1a1a1a;
-            color: #333;
+            border-top: 1px solid var(--border);
+            color: #8aa4b8;
             font-size: 0.78rem;
         }
 
@@ -527,29 +617,47 @@
 </head>
 <body>
 
-<!-- Cursor -->
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
 <!-- Animated background canvas -->
 <canvas id="bg-canvas"></canvas>
+
+<!-- Navigation -->
+<nav>
+    <nav-content>
+        <div class="nav-logo">JE</div>
+        <ul class="nav-menu">
+            <li><a href="#projects">WORK</a></li>
+            <li><a href="#skills">SKILLS</a></li>
+            <li><a href="#contact">CONTACT</a></li>
+        </ul>
+    </nav-content>
+</nav>
 
 <main>
 
     <!-- Header -->
     <header>
-        <div class="header-eyebrow">// Portfolio v2026</div>
-        <h1>Joseph<br><span>Erzuah</span></h1>
-        <div class="tagline">Building intelligent systems, bots, and dashboards for real problems.<br>CS student at UENR. Based in Ghana. No budget, no excuses.</div>
+        <div class="hero-glow"></div>
+        <div class="avatar-circle">JE</div>
+        <div class="header-eyebrow">// Welcome to my portfolio</div>
+        <h1>Joseph <span>Erzuah</span></h1>
+        <div class="tagline">Building intelligent systems, bots, and dashboards for real problems.<br>CS student at UENR. Based in Ghana. Driven by impact, precision, and real-world delivery.</div>
         <div class="contact-line">
-            <a href="https://github.com/darlingtonerzuah" target="_blank">GitHub</a>
-            <a href="https://mail.google.com/mail/?to=darlingtonerzuah@gmail.com" target="_blank">Email</a>
-            <a href="https://t.me/Joseph_126" target="_blank">Telegram</a>
+            <a href="https://github.com/darlingtonerzuah" target="_blank">GITHUB</a>
+            <a href="https://mail.google.com/mail/?to=darlingtonerzuah@gmail.com" target="_blank">EMAIL</a>
+            <a href="https://t.me/Joseph_126" target="_blank">TELEGRAM</a>
+        </div>
+        <div class="scroll-hint">
+            <span></span>
+            <p>Scroll to explore</p>
+        </div>
+        <div class="scroll-hint">
+            <span></span>
+            <p>Scroll to explore</p>
         </div>
     </header>
 
     <!-- Projects -->
-    <section class="reveal">
+    <section class="reveal" id="projects">
         <div class="section-label">Selected Projects</div>
         <div class="projects">
 
@@ -631,7 +739,7 @@
     </section>
 
     <!-- Skills -->
-    <section class="skills-section reveal">
+    <section class="skills-section reveal" id="skills">
         <div class="section-label">Core Skills</div>
         <div class="skills-grid">
             <div class="skill-category">
@@ -661,33 +769,6 @@
         </div>
     </section>
 
-    <!-- Interactive Terminal -->
-    <section class="terminal-section reveal">
-        <div class="section-label">Terminal</div>
-        <div class="terminal">
-            <div class="terminal-bar">
-                <div class="dot dot-r"></div>
-                <div class="dot dot-y"></div>
-                <div class="dot dot-g"></div>
-                <span class="terminal-title">joseph@uenr ~ portfolio</span>
-            </div>
-            <div class="terminal-body">
-                <div class="terminal-line"><span class="t-prompt">joseph@uenr:~$</span> <span class="t-cmd">whoami</span></div>
-                <div class="terminal-line t-out">Joseph Darlington Erzuah — CS student, developer, automation builder.</div>
-                <div class="terminal-line" style="margin-top:10px"><span class="t-prompt">joseph@uenr:~$</span> <span class="t-cmd">cat skills.txt</span></div>
-                <div class="terminal-line t-out">Python · Flask · Flutter · Groq · Telegram Bots · OpenCV · SQLite · ARIMA</div>
-                <div class="terminal-line" style="margin-top:10px"><span class="t-prompt">joseph@uenr:~$</span> <span class="t-cmd">ls projects/</span></div>
-                <div class="terminal-line"><span class="t-green">jarvis-v3/</span>  <span class="t-green">ghana-market-pulse/</span>  <span class="t-green">mobile-assistant/</span>  <span class="t-green">notegen/</span>  <span class="t-highlight">wavemap/</span></div>
-                <div class="terminal-line" style="margin-top:10px"><span class="t-prompt">joseph@uenr:~$</span> <span id="typed-cmd"></span><span class="blink"></span></div>
-                <div id="terminal-output" style="margin-top:6px"></div>
-                <div id="terminal-input-line">
-                    <span class="t-prompt">joseph@uenr:~$</span>
-                    <input type="text" id="terminal-input" placeholder="type a command..." autocomplete="off" spellcheck="false">
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- CTA -->
     <section class="cta reveal" id="contact">
         <h2>Let's Build Something</h2>
@@ -702,26 +783,6 @@
 </main>
 
 <script>
-// ── CURSOR ──
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-
-document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
-});
-
-function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
-}
-animateRing();
-
 // ── CANVAS BG — Particle + Wave ──
 const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
@@ -734,85 +795,127 @@ function resize() {
 resize();
 window.addEventListener('resize', resize);
 
-// Particles
-const particles = Array.from({length: 80}, () => ({
+// Particles for shimmer/light effects
+const particles = Array.from({length: 120}, () => ({
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
-    vx: (Math.random() - 0.5) * 0.3,
-    vy: (Math.random() - 0.5) * 0.3,
-    size: Math.random() * 1.5 + 0.3,
-    alpha: Math.random() * 0.4 + 0.05
+    vx: (Math.random() - 0.5) * 0.2,
+    vy: (Math.random() - 0.5) * 0.2,
+    size: Math.random() * 1.2 + 0.2,
+    alpha: Math.random() * 0.2 + 0.05
 }));
-
-let mouseX = W/2, mouseY = H/2;
-document.addEventListener('mousemove', e => { mouseX = e.clientX; mouseY = e.clientY; });
 
 let t = 0;
 function draw() {
     ctx.clearRect(0, 0, W, H);
-    t += 0.008;
+    t += 0.004;
 
-    // Deep radial glow around mouse
-    const grd = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, 400);
-    grd.addColorStop(0, 'rgba(255,215,0,0.04)');
-    grd.addColorStop(1, 'transparent');
-    ctx.fillStyle = grd;
+    // Ocean gradient background (top to bottom)
+    const oceanGrad = ctx.createLinearGradient(0, 0, 0, H);
+    oceanGrad.addColorStop(0, '#eef7fb');
+    oceanGrad.addColorStop(0.25, '#cbe6f4');
+    oceanGrad.addColorStop(0.55, '#5aa6d8');
+    oceanGrad.addColorStop(1, '#005eb8');
+    ctx.fillStyle = oceanGrad;
     ctx.fillRect(0, 0, W, H);
 
-    // Horizontal wave lines
-    for (let i = 0; i < 6; i++) {
-        ctx.beginPath();
-        const yBase = H * (0.2 + i * 0.13);
-        const amp = 18 + i * 6;
-        const freq = 0.006 + i * 0.001;
-        const speed = t * (0.6 + i * 0.15);
-        ctx.moveTo(0, yBase);
-        for (let x = 0; x <= W; x += 4) {
-            const y = yBase + Math.sin(x * freq + speed) * amp + Math.sin(x * freq * 2.3 - speed * 0.7) * (amp * 0.4);
-            ctx.lineTo(x, y);
-        }
-        const alpha = 0.04 + i * 0.012;
-        ctx.strokeStyle = `rgba(255,215,0,${alpha})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
+    // Dynamic light rays from top
+    for (let i = 0; i < 5; i++) {
+        const xPos = W * (0.15 + i * 0.2);
+        const rayGrad = ctx.createLinearGradient(xPos - 150, 0, xPos + 150, H);
+        rayGrad.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
+        rayGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.03)');
+        rayGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = rayGrad;
+        ctx.fillRect(xPos - 150, 0, 300, H);
     }
 
-    // Particles
-    particles.forEach(p => {
-        // drift toward mouse gently
-        const dx = mouseX - p.x, dy = mouseY - p.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 250) {
-            p.vx += dx / dist * 0.008;
-            p.vy += dy / dist * 0.008;
-        }
-        p.vx *= 0.98; p.vy *= 0.98;
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
-        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+    // Multi-layer wave system
+    const waveConfigs = [
+        { yBase: 0.18, amp: 42, freq: 0.0035, speed: 0.45, alpha: 0.22, width: 2.5 },
+        { yBase: 0.32, amp: 34, freq: 0.0045, speed: 0.6, alpha: 0.18, width: 2.2 },
+        { yBase: 0.48, amp: 28, freq: 0.0052, speed: 0.5, alpha: 0.14, width: 1.8 },
+        { yBase: 0.62, amp: 22, freq: 0.0058, speed: 0.72, alpha: 0.11, width: 1.5 },
+        { yBase: 0.78, amp: 18, freq: 0.0064, speed: 0.52, alpha: 0.09, width: 1.2 }
+    ];
 
+    waveConfigs.forEach((config, index) => {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,215,0,${p.alpha})`;
+        const yBase = H * config.yBase;
+        const speed = t * config.speed;
+        
+        ctx.moveTo(0, yBase);
+        for (let x = 0; x <= W; x += 3) {
+            // Complex wave: combine multiple sine waves for natural ocean movement
+            const wave1 = Math.sin(x * config.freq + speed) * config.amp;
+            const wave2 = Math.sin(x * config.freq * 0.5 + speed * 1.3) * (config.amp * 0.6);
+            const wave3 = Math.sin(x * config.freq * 1.5 - speed * 0.8) * (config.amp * 0.3);
+            
+            const y = yBase + wave1 + wave2 + wave3;
+            ctx.lineTo(x, y);
+        }
+        ctx.lineTo(W, H);
+        ctx.lineTo(0, H);
+        ctx.closePath();
+        
+        // Create gradient for each wave layer
+        const waveGrad = ctx.createLinearGradient(0, yBase, 0, yBase + config.amp * 2);
+        const waveColors = [
+            ['rgba(238, 247, 251, 0)', 'rgba(176, 227, 242, ' + config.alpha + ')', 'rgba(78, 180, 220, ' + config.alpha * 0.8 + ')'],
+            ['rgba(78, 180, 220, 0)', 'rgba(60, 140, 190, ' + config.alpha + ')', 'rgba(0, 96, 181, ' + config.alpha * 0.7 + ')'],
+            ['rgba(0, 96, 181, 0)', 'rgba(0, 82, 170, ' + config.alpha + ')', 'rgba(0, 62, 145, ' + config.alpha * 0.6 + ')']
+        ];
+        
+        const colors = waveColors[index % waveColors.length];
+        waveGrad.addColorStop(0, colors[0]);
+        waveGrad.addColorStop(0.5, colors[1]);
+        waveGrad.addColorStop(1, colors[2]);
+        
+        ctx.fillStyle = waveGrad;
         ctx.fill();
     });
 
-    // Connect nearby particles
-    for (let i = 0; i < particles.length; i++) {
-        for (let j = i+1; j < particles.length; j++) {
-            const dx = particles[i].x - particles[j].x;
-            const dy = particles[i].y - particles[j].y;
-            const d = Math.sqrt(dx*dx + dy*dy);
-            if (d < 90) {
-                ctx.beginPath();
-                ctx.moveTo(particles[i].x, particles[i].y);
-                ctx.lineTo(particles[j].x, particles[j].y);
-                ctx.strokeStyle = `rgba(255,215,0,${(1 - d/90) * 0.07})`;
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-            }
+    // Subtle particle shimmer effect (like light reflecting on water)
+    particles.forEach(p => {
+        p.y += Math.sin(t * 2 + p.x * 0.01) * 0.2;
+        if (p.y < 0) p.y = H;
+        if (p.y > H) p.y = 0;
+        if (p.x < 0) p.x = W;
+        if (p.x > W) p.x = 0;
+
+        // Light reflection shimmer
+        const shimmer = Math.sin(t * 1.5 + p.x * 0.005) * 0.5 + 0.5;
+        const alpha = (Math.random() * 0.15 + 0.05) * shimmer;
+        
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fill();
+    });
+
+    // Animated foam/crest lines
+    for (let i = 0; i < 3; i++) {
+        ctx.beginPath();
+        const foamY = H * (0.25 + i * 0.25) + Math.sin(t * 0.3 + i) * 8;
+        const foamWave = Math.sin(t * 0.2 + i * Math.PI / 1.5) * 40 + 20;
+        
+        ctx.moveTo(-20, foamY);
+        for (let x = -20; x <= W + 20; x += 5) {
+            const foamAmp = Math.sin(x * 0.01 + t * 0.4) * foamWave;
+            ctx.lineTo(x, foamY + foamAmp);
         }
+        ctx.lineWidth = 0.8;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 - i * 0.04})`;
+        ctx.stroke();
     }
+
+    // Subtle depth overlay
+    const depthGrad = ctx.createLinearGradient(0, 0, 0, H);
+    depthGrad.addColorStop(0, 'rgba(232, 244, 248, 0.05)');
+    depthGrad.addColorStop(0.5, 'rgba(0, 0, 0, 0)');
+    depthGrad.addColorStop(1, 'rgba(0, 0, 0, 0.1)');
+    ctx.fillStyle = depthGrad;
+    ctx.fillRect(0, 0, W, H);
 
     requestAnimationFrame(draw);
 }
@@ -826,51 +929,6 @@ const observer = new IntersectionObserver(entries => {
     });
 }, { threshold: 0.12 });
 reveals.forEach(r => observer.observe(r));
-
-// ── TERMINAL ──
-const commands = {
-    'help': '  Available: whoami, skills, projects, contact, clear',
-    'whoami': '  Joseph Darlington Erzuah — AI/Automation Dev. UENR. Ghana.',
-    'skills': '  Python, Flask, Flutter, Groq, Telegram Bots, OpenCV, SQLite, ARIMA',
-    'projects': '  jarvis-v3  ghana-market-pulse  mobile-assistant  notegen  wavemap',
-    'contact': '  Email: darlingtonerzuah@gmail.com | Telegram: t.me/Joseph_126',
-    'clear': '__clear__',
-    'ls': '  jarvis-v3/  gmp/  mobile-assistant/  notegen/  wavemap/',
-    'date': `  ${new Date().toDateString()}`,
-    'uname': '  Joseph OS v2026 — Sunyani, Ghana',
-};
-
-const input = document.getElementById('terminal-input');
-const output = document.getElementById('terminal-output');
-
-input.addEventListener('keydown', e => {
-    if (e.key === 'Enter') {
-        const cmd = input.value.trim().toLowerCase();
-        input.value = '';
-        if (!cmd) return;
-
-        const line = document.createElement('div');
-        line.className = 'terminal-line';
-        line.innerHTML = `<span class="t-prompt">joseph@uenr:~$</span> <span class="t-cmd">${cmd}</span>`;
-        output.appendChild(line);
-
-        const res = commands[cmd];
-        const resLine = document.createElement('div');
-        resLine.className = 'terminal-line t-out';
-
-        if (res === '__clear__') {
-            output.innerHTML = '';
-        } else if (res) {
-            resLine.textContent = res;
-            output.appendChild(resLine);
-        } else {
-            resLine.innerHTML = `  <span style="color:#ff4444">command not found: ${cmd}</span> — try 'help'`;
-            output.appendChild(resLine);
-        }
-
-        output.scrollTop = output.scrollHeight;
-    }
-});
 </script>
 </body>
 </html>
