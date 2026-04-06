@@ -41,7 +41,14 @@
 
         /* ── CANVAS BACKGROUND ── */
         #bg-canvas {
-            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
         }
 
         /* ── NOISE OVERLAY ── */
@@ -103,7 +110,7 @@
             padding: 0 40px;
         }
 
-        nav-content {
+        .nav-content {
             max-width: 1100px;
             margin: 0 auto;
             display: flex;
@@ -622,14 +629,14 @@
 
 <!-- Navigation -->
 <nav>
-    <nav-content>
+    <div class="nav-content">
         <div class="nav-logo">JE</div>
         <ul class="nav-menu">
             <li><a href="#projects">WORK</a></li>
             <li><a href="#skills">SKILLS</a></li>
             <li><a href="#contact">CONTACT</a></li>
         </ul>
-    </nav-content>
+    </div>
 </nav>
 
 <main>
@@ -643,12 +650,8 @@
         <div class="tagline">Building intelligent systems, bots, and dashboards for real problems.<br>CS student at UENR. Based in Ghana. Driven by impact, precision, and real-world delivery.</div>
         <div class="contact-line">
             <a href="https://github.com/darlingtonerzuah" target="_blank">GITHUB</a>
-            <a href="https://mail.google.com/mail/?to=darlingtonerzuah@gmail.com" target="_blank">EMAIL</a>
+            <a href="mailto:darlingtonerzuah@gmail.com" target="_blank">EMAIL</a>
             <a href="https://t.me/Joseph_126" target="_blank">TELEGRAM</a>
-        </div>
-        <div class="scroll-hint">
-            <span></span>
-            <p>Scroll to explore</p>
         </div>
         <div class="scroll-hint">
             <span></span>
@@ -703,7 +706,7 @@
                     <span class="tech-tag">JWT</span>
                     <span class="tech-tag">Groq</span>
                 </div>
-                <a href="https://mail.google.com/mail/?to=darlingtonerzuah@gmail.com" class="project-link" target="_blank">Hire for Custom →</a>
+                <a href="mailto:darlingtonerzuah@gmail.com" class="project-link" target="_blank">Hire for Custom →</a>
             </div>
 
             <div class="project">
@@ -773,7 +776,7 @@
     <section class="cta reveal" id="contact">
         <h2>Let's Build Something</h2>
         <p>Custom automation, bots, dashboards, or AI integrations. Per-project or ongoing maintenance contracts.</p>
-        <a href="https://mail.google.com/mail/?to=darlingtonerzuah@gmail.com" target="_blank" class="cta-button"><span>Get in Touch</span></a>
+        <a href="mailto:darlingtonerzuah@gmail.com" target="_blank" class="cta-button"><span>Get in Touch</span></a>
     </section>
 
     <footer>
@@ -788,9 +791,20 @@ const canvas = document.getElementById('bg-canvas');
 const ctx = canvas.getContext('2d');
 let W, H;
 
+let stars = [];
 function resize() {
     W = canvas.width = window.innerWidth;
     H = canvas.height = window.innerHeight;
+    
+    // Initialize/recalculate stars on resize to cover full area
+    const numStars = Math.floor((W * H) / 6000);
+    stars = Array.from({length: numStars}, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        size: Math.random() * 1.2 + 0.3,
+        twinkleSpeed: Math.random() * 3 + 1,
+        twinklePhase: Math.random() * Math.PI * 2
+    }));
 }
 resize();
 window.addEventListener('resize', resize);
@@ -806,37 +820,86 @@ const particles = Array.from({length: 120}, () => ({
 }));
 
 let t = 0;
+let shootingStarsArray = [];
 function draw() {
     ctx.clearRect(0, 0, W, H);
     t += 0.004;
 
-    // Ocean gradient background (top to bottom)
-    const oceanGrad = ctx.createLinearGradient(0, 0, 0, H);
-    oceanGrad.addColorStop(0, '#eef7fb');
-    oceanGrad.addColorStop(0.25, '#cbe6f4');
-    oceanGrad.addColorStop(0.55, '#5aa6d8');
-    oceanGrad.addColorStop(1, '#005eb8');
-    ctx.fillStyle = oceanGrad;
-    ctx.fillRect(0, 0, W, H);
+    // Twinkling stars background
+    stars.forEach(s => {
+        const shimmer = Math.sin(t * s.twinkleSpeed * 2 + s.twinklePhase) * 0.5 + 0.5;
+        const alpha = shimmer * 0.8;
+        
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(200, 230, 255, ${alpha})`;
+        ctx.fill();
+    });
+
+    // Shooting stars
+    if (Math.random() < 0.015 && shootingStarsArray.length < 3) {
+        shootingStarsArray.push({
+            x: Math.random() * W * 1.5 - W * 0.25,
+            y: Math.random() * H * 0.3 - H * 0.1,
+            len: Math.random() * 150 + 50,
+            speed: Math.random() * 15 + 10,
+            angle: Math.PI / 4 + (Math.random() - 0.5) * 0.4,
+            alpha: 1
+        });
+    }
+
+    for (let i = shootingStarsArray.length - 1; i >= 0; i--) {
+        let ss = shootingStarsArray[i];
+        ss.x += Math.cos(ss.angle) * ss.speed;
+        ss.y += Math.sin(ss.angle) * ss.speed;
+        ss.alpha -= 0.01;
+        
+        if (ss.alpha <= 0) {
+            shootingStarsArray.splice(i, 1);
+        } else {
+            const grad = ctx.createLinearGradient(
+                ss.x, ss.y, 
+                ss.x - Math.cos(ss.angle) * ss.len, 
+                ss.y - Math.sin(ss.angle) * ss.len
+            );
+            grad.addColorStop(0, `rgba(255, 255, 255, ${ss.alpha})`);
+            grad.addColorStop(1, `rgba(255, 255, 255, 0)`);
+            
+            ctx.beginPath();
+            ctx.moveTo(ss.x, ss.y);
+            ctx.lineTo(
+                ss.x - Math.cos(ss.angle) * ss.len, 
+                ss.y - Math.sin(ss.angle) * ss.len
+            );
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = grad;
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(ss.x, ss.y, 1.5, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(255, 255, 255, ${ss.alpha})`;
+            ctx.fill();
+        }
+    }
 
     // Dynamic light rays from top
     for (let i = 0; i < 5; i++) {
         const xPos = W * (0.15 + i * 0.2);
         const rayGrad = ctx.createLinearGradient(xPos - 150, 0, xPos + 150, H);
-        rayGrad.addColorStop(0, 'rgba(255, 255, 255, 0.1)');
-        rayGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.03)');
-        rayGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        rayGrad.addColorStop(0, 'rgba(109, 184, 255, 0.05)');
+        rayGrad.addColorStop(0.5, 'rgba(109, 184, 255, 0.02)');
+        rayGrad.addColorStop(1, 'rgba(109, 184, 255, 0)');
         ctx.fillStyle = rayGrad;
         ctx.fillRect(xPos - 150, 0, 300, H);
     }
 
     // Multi-layer wave system
     const waveConfigs = [
-        { yBase: 0.18, amp: 42, freq: 0.0035, speed: 0.45, alpha: 0.22, width: 2.5 },
-        { yBase: 0.32, amp: 34, freq: 0.0045, speed: 0.6, alpha: 0.18, width: 2.2 },
-        { yBase: 0.48, amp: 28, freq: 0.0052, speed: 0.5, alpha: 0.14, width: 1.8 },
-        { yBase: 0.62, amp: 22, freq: 0.0058, speed: 0.72, alpha: 0.11, width: 1.5 },
-        { yBase: 0.78, amp: 18, freq: 0.0064, speed: 0.52, alpha: 0.09, width: 1.2 }
+        { yBase: 0.18, amp: 42, freq: 0.0035, speed: 0.45, alpha: 0.12, width: 2.5 },
+        { yBase: 0.32, amp: 34, freq: 0.0045, speed: 0.6, alpha: 0.10, width: 2.2 },
+        { yBase: 0.48, amp: 28, freq: 0.0052, speed: 0.5, alpha: 0.08, width: 1.8 },
+        { yBase: 0.62, amp: 22, freq: 0.0058, speed: 0.72, alpha: 0.06, width: 1.5 },
+        { yBase: 0.78, amp: 18, freq: 0.0064, speed: 0.52, alpha: 0.04, width: 1.2 }
     ];
 
     waveConfigs.forEach((config, index) => {
@@ -846,7 +909,7 @@ function draw() {
         
         ctx.moveTo(0, yBase);
         for (let x = 0; x <= W; x += 3) {
-            // Complex wave: combine multiple sine waves for natural ocean movement
+            // Complex wave: combine multiple sine waves for natural data movement
             const wave1 = Math.sin(x * config.freq + speed) * config.amp;
             const wave2 = Math.sin(x * config.freq * 0.5 + speed * 1.3) * (config.amp * 0.6);
             const wave3 = Math.sin(x * config.freq * 1.5 - speed * 0.8) * (config.amp * 0.3);
@@ -861,9 +924,9 @@ function draw() {
         // Create gradient for each wave layer
         const waveGrad = ctx.createLinearGradient(0, yBase, 0, yBase + config.amp * 2);
         const waveColors = [
-            ['rgba(238, 247, 251, 0)', 'rgba(176, 227, 242, ' + config.alpha + ')', 'rgba(78, 180, 220, ' + config.alpha * 0.8 + ')'],
-            ['rgba(78, 180, 220, 0)', 'rgba(60, 140, 190, ' + config.alpha + ')', 'rgba(0, 96, 181, ' + config.alpha * 0.7 + ')'],
-            ['rgba(0, 96, 181, 0)', 'rgba(0, 82, 170, ' + config.alpha + ')', 'rgba(0, 62, 145, ' + config.alpha * 0.6 + ')']
+            ['rgba(109, 184, 255, 0)', 'rgba(78, 150, 255, ' + config.alpha + ')', 'rgba(109, 184, 255, ' + config.alpha * 0.8 + ')'],
+            ['rgba(78, 150, 255, 0)', 'rgba(109, 184, 255, ' + config.alpha + ')', 'rgba(4, 9, 21, ' + config.alpha * 0.7 + ')'],
+            ['rgba(4, 9, 21, 0)', 'rgba(78, 150, 255, ' + config.alpha + ')', 'rgba(109, 184, 255, ' + config.alpha * 0.6 + ')']
         ];
         
         const colors = waveColors[index % waveColors.length];
@@ -875,7 +938,7 @@ function draw() {
         ctx.fill();
     });
 
-    // Subtle particle shimmer effect (like light reflecting on water)
+    // Subtle particle shimmer effect
     particles.forEach(p => {
         p.y += Math.sin(t * 2 + p.x * 0.01) * 0.2;
         if (p.y < 0) p.y = H;
@@ -889,11 +952,11 @@ function draw() {
         
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fillStyle = `rgba(109, 184, 255, ${alpha})`;
         ctx.fill();
     });
 
-    // Animated foam/crest lines
+    // Animated crest lines
     for (let i = 0; i < 3; i++) {
         ctx.beginPath();
         const foamY = H * (0.25 + i * 0.25) + Math.sin(t * 0.3 + i) * 8;
@@ -905,17 +968,9 @@ function draw() {
             ctx.lineTo(x, foamY + foamAmp);
         }
         ctx.lineWidth = 0.8;
-        ctx.strokeStyle = `rgba(255, 255, 255, ${0.15 - i * 0.04})`;
+        ctx.strokeStyle = `rgba(109, 184, 255, ${0.08 - i * 0.02})`;
         ctx.stroke();
     }
-
-    // Subtle depth overlay
-    const depthGrad = ctx.createLinearGradient(0, 0, 0, H);
-    depthGrad.addColorStop(0, 'rgba(232, 244, 248, 0.05)');
-    depthGrad.addColorStop(0.5, 'rgba(0, 0, 0, 0)');
-    depthGrad.addColorStop(1, 'rgba(0, 0, 0, 0.1)');
-    ctx.fillStyle = depthGrad;
-    ctx.fillRect(0, 0, W, H);
 
     requestAnimationFrame(draw);
 }
