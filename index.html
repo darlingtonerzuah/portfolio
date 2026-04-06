@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Joseph Erzuah — AI & Automation Developer. Building intelligent systems, bots, and data dashboards for real world problems.">
+    <meta name="keywords" content="Joseph Erzuah, AI Developer, Automation, Python, Flask, Bots, Ghana">
+    <meta name="theme-color" content="#040817">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     <title>Joseph Erzuah — AI/Automation Developer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
@@ -22,7 +26,12 @@
             --border: rgba(255, 255, 255, 0.08);
         }
 
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+
+        ::selection {
+            background: rgba(109, 184, 255, 0.4);
+            color: #ffffff;
+        }
 
         body {
             background: radial-gradient(circle at 50% -10%, rgba(109, 184, 255, 0.08) 0%, transparent 22%),
@@ -384,10 +393,12 @@
         .project::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(109, 184, 255, 0.08), transparent 55%);
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(109, 184, 255, 0.08), transparent 40%);
             opacity: 0;
             transition: opacity 0.4s;
+            z-index: 0;
+            pointer-events: none;
         }
 
         .project:hover { transform: translateY(-8px); box-shadow: 0 32px 56px rgba(0, 0, 0, 0.22); }
@@ -700,9 +711,41 @@
             .contact-line { flex-wrap: wrap; margin-top: 20px; }
             .avatar-circle { width: 110px; height: 110px; font-size: 48px; margin-bottom: 24px; }
         }
+
+        /* ── CUSTOM SCROLLBAR ── */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg); border-left: 1px solid var(--border); }
+        ::-webkit-scrollbar-thumb { background: rgba(109, 184, 255, 0.3); border-radius: 10px; border: 2px solid var(--bg); }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(109, 184, 255, 0.6); }
+
+        /* ── SKILL BADGES ── */
+        .skill-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .skill-badge { font-size: 0.75rem; color: rgba(243, 247, 255, 0.85); background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(109, 184, 255, 0.15); padding: 5px 12px; border-radius: 999px; transition: all 0.3s ease; }
+        .skill-category:hover .skill-badge { border-color: rgba(109, 184, 255, 0.3); }
+        .skill-badge:hover { background: rgba(109, 184, 255, 0.15); transform: translateY(-2px); color: #fff; box-shadow: 0 4px 12px rgba(109, 184, 255, 0.2); }
+
+        /* ── CLIPBOARD TOAST ── */
+        .copy-email-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: #fff; padding: 14px 24px; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; border-radius: 4px; cursor: pointer; transition: all 0.3s ease; }
+        .copy-email-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(109, 184, 255, 0.9); color: #040817; padding: 12px 24px; border-radius: 999px; font-weight: 700; font-size: 0.85rem; opacity: 0; z-index: 2000; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 10px 25px rgba(109, 184, 255, 0.3); }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        /* ── BOOT SEQUENCE ── */
+        #boot-screen { position: fixed; inset: 0; background: #040817; z-index: 9999; display: flex; align-items: center; justify-content: center; color: #6db8ff; font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 1.2rem; transition: opacity 0.5s ease-in-out, visibility 0.5s; }
+        .boot-text { text-align: left; opacity: 1; animation: bootGlow 1s ease-in-out infinite alternate; }
+        @keyframes bootGlow { from { text-shadow: 0 0 4px rgba(109, 184, 255, 0.4); } to { text-shadow: 0 0 12px rgba(109, 184, 255, 1); } }
+        body.booting { overflow: hidden; }
     </style>
 </head>
 <body>
+
+<!-- Boot Sequence -->
+<div id="boot-screen">
+    <div class="boot-text">
+        <p>> INITIATING SYSTEMS...</p>
+        <p id="boot-progress">[==========          ] 50%</p>
+    </div>
+</div>
 
 <!-- Animated background canvas -->
 <canvas id="bg-canvas"></canvas>
@@ -732,9 +775,9 @@
         <h1>Joseph <span>Erzuah</span></h1>
         <div class="tagline"><span class="typewriter-text"></span><span class="cursor">|</span><br>CS student at UENR. Based in Ghana. Driven by impact, precision, and real-world delivery.</div>
         <div class="contact-line">
-            <a href="https://github.com/darlingtonerzuah" target="_blank">GITHUB</a>
-            <a href="mailto:darlingtonerzuah@gmail.com" target="_blank">EMAIL</a>
-            <a href="https://t.me/Joseph_126" target="_blank">TELEGRAM</a>
+            <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noopener noreferrer">GITHUB</a>
+            <a href="mailto:darlingtonerzuah@gmail.com">EMAIL</a>
+            <a href="https://t.me/Joseph_126" target="_blank" rel="noopener noreferrer">TELEGRAM</a>
         </div>
         <div class="scroll-hint">
             <span></span>
@@ -830,27 +873,39 @@
         <div class="skills-grid">
             <div class="skill-category">
                 <h3>Backend</h3>
-                <p>Python, Flask, FastAPI, REST APIs, SQLite, PostgreSQL, JWT Auth, Web Scraping</p>
+                <div class="skill-badges">
+                    <span class="skill-badge">Python</span><span class="skill-badge">Flask</span><span class="skill-badge">FastAPI</span><span class="skill-badge">REST APIs</span><span class="skill-badge">SQLite</span><span class="skill-badge">PostgreSQL</span><span class="skill-badge">JWT Auth</span><span class="skill-badge">Web Scraping</span>
+                </div>
             </div>
             <div class="skill-category">
                 <h3>AI / ML</h3>
-                <p>Groq API, OpenAI, LLM Prompting, OpenCV, Time Series, ARIMA Models</p>
+                <div class="skill-badges">
+                    <span class="skill-badge">Groq API</span><span class="skill-badge">OpenAI</span><span class="skill-badge">LLM Prompting</span><span class="skill-badge">OpenCV</span><span class="skill-badge">Time Series</span><span class="skill-badge">ARIMA Models</span>
+                </div>
             </div>
             <div class="skill-category">
                 <h3>Frontend</h3>
-                <p>HTML/CSS/JS, Chart.js, Responsive Design, Dark UIs, Interactive Dashboards</p>
+                <div class="skill-badges">
+                    <span class="skill-badge">HTML/CSS/JS</span><span class="skill-badge">Chart.js</span><span class="skill-badge">Responsive Design</span><span class="skill-badge">Dark UIs</span><span class="skill-badge">Web Dashboards</span>
+                </div>
             </div>
             <div class="skill-category">
                 <h3>Mobile / Desktop</h3>
-                <p>Flutter, Android Studio, tkinter, WebView, Cross-Platform Dev</p>
+                <div class="skill-badges">
+                    <span class="skill-badge">Flutter</span><span class="skill-badge">Android Studio</span><span class="skill-badge">tkinter</span><span class="skill-badge">WebView</span><span class="skill-badge">Cross-Platform</span>
+                </div>
             </div>
             <div class="skill-category">
                 <h3>Automation</h3>
-                <p>Telegram Bots, WhatsApp Bots, Task Scheduling, Windows Automation, File Ops</p>
+                <div class="skill-badges">
+                    <span class="skill-badge">Telegram Bots</span><span class="skill-badge">WhatsApp Bots</span><span class="skill-badge">Task Scheduling</span><span class="skill-badge">Windows Automation</span><span class="skill-badge">File Ops</span>
+                </div>
             </div>
             <div class="skill-category">
                 <h3>Deployment</h3>
-                <p>GitHub Pages, Ngrok, Local Hosting, Windows Services, Git/Version Control</p>
+                <div class="skill-badges">
+                    <span class="skill-badge">GitHub Pages</span><span class="skill-badge">Ngrok</span><span class="skill-badge">Local Hosting</span><span class="skill-badge">Windows Services</span><span class="skill-badge">Git/Version Control</span>
+                </div>
             </div>
         </div>
     </section>
@@ -859,16 +914,22 @@
     <section class="cta reveal" id="contact">
         <h2>Let's Build Something</h2>
         <p>Custom automation, bots, dashboards, or AI integrations. Per-project or ongoing maintenance contracts.</p>
-        <a href="mailto:darlingtonerzuah@gmail.com" target="_blank" class="cta-button"><span>Get in Touch</span></a>
+        <div class="cta-actions" style="display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap;">
+            <a href="mailto:darlingtonerzuah@gmail.com" target="_blank" class="cta-button"><span>Get in Touch</span></a>
+            <button class="copy-email-btn" onclick="copyEmail()">📋 Copy Email</button>
+        </div>
     </section>
 
     <footer>
-        <p>© 2026 Joseph Erzuah · Built from scratch in Ghana · No budget, no excuses.</p>
+        <p>© 2026 Joseph Erzuah · Software & Automation Engineer.</p>
+        <p style="opacity: 0.6; margin-top: 6px;">Built from scratch in Ghana · No budget, no excuses.</p>
     </footer>
 
-    <a href="#" id="backToTop" class="back-to-top">↑</a>
+    <a href="#" id="backToTop" class="back-to-top" aria-label="Scroll back to top">↑</a>
 
 </main>
+
+<div id="toast" class="toast">Email copied to clipboard!</div>
 
 <script>
 // ── CANVAS BG — Particle + Wave ──
@@ -1165,6 +1226,49 @@ function typeWriter() {
     setTimeout(typeWriter, typeSpeed);
 }
 setTimeout(typeWriter, 800);
+
+// 4. Project Glow Mouse Tracking
+document.querySelectorAll('.project').forEach(project => {
+    project.addEventListener('mousemove', e => {
+        const rect = project.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        project.style.setProperty('--mouse-x', `${x}px`);
+        project.style.setProperty('--mouse-y', `${y}px`);
+    });
+});
+
+// 5. Clipboard Copy
+function copyEmail() {
+    navigator.clipboard.writeText("darlingtonerzuah@gmail.com").then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+    }).catch(err => {
+        console.error('Could not copy text: ', err);
+    });
+}
+
+// 6. Boot Sequence
+document.body.classList.add('booting');
+const bootScreen = document.getElementById('boot-screen');
+const bootProgress = document.getElementById('boot-progress');
+
+let progress = 0;
+const bootInterval = setInterval(() => {
+    progress += 25;
+    const bars = '='.repeat(progress / 5) + ' '.repeat(20 - (progress / 5));
+    bootProgress.textContent = `[${bars}] ${progress}%`;
+    
+    if (progress >= 100) {
+        clearInterval(bootInterval);
+        setTimeout(() => {
+            bootScreen.style.opacity = '0';
+            bootScreen.style.visibility = 'hidden';
+            document.body.classList.remove('booting');
+        }, 300);
+    }
+}, 150);
 
 </script>
 </body>
