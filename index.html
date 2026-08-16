@@ -28,9 +28,56 @@
     --accent-soft: rgba(3, 105, 161, 0.08);
     --up: #0a7a4c;
     --down: #b91c1c;
+    --shadow-1: 0 1px 2px rgba(13,31,54,0.04);
+    --shadow-2: 0 10px 24px rgba(13,31,54,0.08);
+    --shadow-panel: 0 1px 3px rgba(13,31,54,0.05);
+    --glow-1: rgba(3,105,161,0.055);
+    --glow-2: rgba(15,118,110,0.045);
+    --glow-market: rgba(15,118,110,0.08);
+    --glow-contact: rgba(3,105,161,0.07);
+    --logo-shadow: rgba(13,31,54,0.14);
+    --btn-primary-fg: #ffffff;
+    --btn-primary-hover-bg: #04588a;
+    --btn-primary-hover-shadow: rgba(3,105,161,0.28);
+    --bar-bg: rgba(245,248,251,0.92);
+    --selection-bg: rgba(3,105,161,0.16);
+    --dot-shadow: rgba(10,122,76,0.16);
+    --nav-hover-bg: rgba(13,31,54,0.04);
     --sidebar-w: 380px;
     --content-max: 720px;
     --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  [data-theme="dark"] {
+    --bg: #080b11;
+    --bg2: #0c1019;
+    --surface: #10151f;
+    --surface-hover: #141b28;
+    --border: rgba(148, 172, 204, 0.14);
+    --border-strong: rgba(148, 172, 204, 0.26);
+    --fg: #eef2f8;
+    --muted: #97a5ba;
+    --muted-dim: #6c7893;
+    --accent: #38d4c9;
+    --accent-2: #5b8def;
+    --accent-soft: rgba(56, 212, 201, 0.12);
+    --up: #3ecf8e;
+    --down: #f2685f;
+    --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
+    --shadow-2: 0 14px 30px rgba(0,0,0,0.4);
+    --shadow-panel: 0 10px 26px rgba(0,0,0,0.28);
+    --glow-1: rgba(56, 212, 201, 0.10);
+    --glow-2: rgba(91, 141, 239, 0.08);
+    --glow-market: rgba(56, 212, 201, 0.10);
+    --glow-contact: rgba(56, 212, 201, 0.10);
+    --logo-shadow: rgba(56, 212, 201, 0.18);
+    --btn-primary-fg: #06231f;
+    --btn-primary-hover-bg: #4ee4d8;
+    --btn-primary-hover-shadow: rgba(56,212,201,0.25);
+    --bar-bg: rgba(8,11,17,0.9);
+    --selection-bg: rgba(56, 212, 201, 0.32);
+    --dot-shadow: rgba(62,207,142,0.18);
+    --nav-hover-bg: rgba(255,255,255,0.02);
   }
 
   html { scroll-behavior: smooth; }
@@ -39,10 +86,11 @@
     * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   }
 
-  ::selection { background: rgba(3, 105, 161, 0.16); color: var(--fg); }
+  ::selection { background: var(--selection-bg); color: var(--fg); }
 
   body {
     background: var(--bg);
+    transition: background 0.35s var(--ease);
     color: var(--fg);
     font-family: 'Inter', sans-serif;
     line-height: 1.65;
@@ -55,8 +103,8 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(680px circle at 12% -8%, rgba(3, 105, 161, 0.055), transparent 60%),
-      radial-gradient(560px circle at 100% 30%, rgba(15, 118, 110, 0.045), transparent 55%);
+      radial-gradient(680px circle at 12% -8%, var(--glow-1), transparent 60%),
+      radial-gradient(560px circle at 100% 30%, var(--glow-2), transparent 55%);
     pointer-events: none;
     z-index: 0;
   }
@@ -100,7 +148,7 @@
     width: 46px;
     height: 46px;
     border-radius: 12px;
-    box-shadow: 0 0 0 1px var(--border-strong), 0 6px 16px rgba(13, 31, 54, 0.14);
+    box-shadow: 0 0 0 1px var(--border-strong), 0 6px 16px var(--logo-shadow);
   }
 
   .brand-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--fg); line-height: 1.2; }
@@ -151,10 +199,11 @@
     background: var(--muted-dim);
     transition: width 0.25s var(--ease), background 0.25s var(--ease);
   }
-  nav.side-nav a:hover, nav.side-nav a.active { color: var(--fg); background: rgba(13,31,54,0.04); }
+  nav.side-nav a:hover, nav.side-nav a.active { color: var(--fg); background: var(--nav-hover-bg); }
   nav.side-nav a:hover .dash, nav.side-nav a.active .dash { width: 38px; background: var(--accent); }
 
   .sidebar-footer { padding-top: 28px; }
+  .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .socials { display: flex; gap: 18px; }
   .socials a {
     width: 38px; height: 38px;
@@ -168,13 +217,31 @@
   .socials a:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-3px); background: var(--accent-soft); }
   .socials svg { width: 17px; height: 17px; }
 
+  .theme-toggle {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s var(--ease);
+    margin-top: 18px;
+    flex-shrink: 0;
+  }
+  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+  .theme-toggle svg { width: 17px; height: 17px; }
+  .theme-toggle .ico-moon { display: none; }
+  [data-theme="dark"] .theme-toggle .ico-sun { display: none; }
+  [data-theme="dark"] .theme-toggle .ico-moon { display: block; }
+
   .avail {
     display: inline-flex; align-items: center; gap: 8px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.7rem; color: var(--up);
     margin-top: 22px; letter-spacing: 0.03em;
   }
-  .avail .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); box-shadow: 0 0 0 3px rgba(10,122,76,0.16); animation: pulseDot 2s ease-in-out infinite; }
+  .avail .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); box-shadow: 0 0 0 3px var(--dot-shadow); animation: pulseDot 2s ease-in-out infinite; }
   @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
   /* ── MAIN CONTENT ── */
@@ -221,7 +288,7 @@
     border-radius: 12px;
     padding: 16px 18px;
     background: var(--surface);
-    box-shadow: 0 1px 2px rgba(13,31,54,0.04);
+    box-shadow: var(--shadow-1);
   }
   .fact-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
   .fact-value { font-size: 0.92rem; font-weight: 600; color: var(--fg); }
@@ -237,10 +304,10 @@
     border-radius: 14px;
     padding: 22px 22px 20px;
     background: var(--surface);
-    box-shadow: 0 1px 2px rgba(13,31,54,0.04);
+    box-shadow: var(--shadow-1);
     transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
   }
-  .skill-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: 0 10px 24px rgba(13,31,54,0.08); }
+  .skill-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-2); }
   .skill-card h3 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg); margin-bottom: 12px; display: flex; align-items: center; gap: 9px; }
   .skill-card h3 .ico { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); flex-shrink: 0; }
   .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -262,12 +329,12 @@
     padding: 30px 30px 22px;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(13,31,54,0.05);
+    box-shadow: var(--shadow-panel);
   }
   .markets-panel::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(360px circle at 90% 0%, rgba(15, 118, 110, 0.08), transparent 60%);
+    background: radial-gradient(360px circle at 90% 0%, var(--glow-market), transparent 60%);
     pointer-events: none;
   }
   .markets-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
@@ -338,12 +405,12 @@
     background: var(--surface);
     position: relative;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(13,31,54,0.05);
+    box-shadow: var(--shadow-panel);
   }
   .contact-card::before {
     content: '';
     position: absolute; inset: 0;
-    background: radial-gradient(420px circle at 100% 100%, rgba(3, 105, 161, 0.07), transparent 60%);
+    background: radial-gradient(420px circle at 100% 100%, var(--glow-contact), transparent 60%);
     pointer-events: none;
   }
   .contact-card h2 { font-size: 1.6rem; margin-bottom: 12px; position: relative; }
@@ -361,8 +428,8 @@
     border: 1px solid transparent;
     transition: all 0.25s var(--ease);
   }
-  .btn-primary { background: var(--accent); color: #ffffff; }
-  .btn-primary:hover { background: #04588a; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(3,105,161,0.28); }
+  .btn-primary { background: var(--accent); color: var(--btn-primary-fg); }
+  .btn-primary:hover { background: var(--btn-primary-hover-bg); transform: translateY(-2px); box-shadow: 0 10px 24px var(--btn-primary-hover-shadow); }
   .btn-ghost { border-color: var(--border-strong); color: var(--fg); background: transparent; }
   .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
 
@@ -404,7 +471,7 @@
     .mobile-bar {
       display: flex;
       position: sticky; top: 0; z-index: 500;
-      background: rgba(245,248,251,0.92);
+      background: var(--bar-bg);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid var(--border);
       padding: 12px 24px;
@@ -423,6 +490,7 @@
       white-space: nowrap;
     }
     .mobile-bar a.active { color: var(--accent); }
+    .mobile-toggle { margin-top: 0; margin-left: auto; flex-shrink: 0; }
   }
 </style>
 </head>
@@ -455,16 +523,22 @@
 
     <div class="sidebar-footer">
       <div class="avail"><span class="dot"></span>AVAILABLE FOR PROJECTS</div>
-      <div class="socials" style="margin-top:18px;">
-        <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.44-2.71 5.42-5.28 5.7.41.36.78 1.08.78 2.18 0 1.58-.01 2.85-.01 3.24 0 .31.21.67.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
-        </a>
-        <a href="mailto:darlingtonerzuah@gmail.com" aria-label="Email">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
-        </a>
-        <a href="https://t.me/Joseph_126" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 3.5 2.6 10.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8s.7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.9l3.3-15.4c.3-1.3-.5-1.9-1.8-1.4Zm-12 11.2-1.6-5 10.7-6.7c.5-.3.9-.1.6.3L9.5 14.7Z"/></svg>
-        </a>
+      <div class="footer-row">
+        <div class="socials" style="margin-top:18px;">
+          <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.44-2.71 5.42-5.28 5.7.41.36.78 1.08.78 2.18 0 1.58-.01 2.85-.01 3.24 0 .31.21.67.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
+          </a>
+          <a href="mailto:darlingtonerzuah@gmail.com" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
+          </a>
+          <a href="https://t.me/Joseph_126" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 3.5 2.6 10.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8s.7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.9l3.3-15.4c.3-1.3-.5-1.9-1.8-1.4Zm-12 11.2-1.6-5 10.7-6.7c.5-.3.9-.1.6.3L9.5 14.7Z"/></svg>
+          </a>
+        </div>
+        <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+        </button>
       </div>
     </div>
   </aside>
@@ -478,6 +552,10 @@
       <a href="#markets">Markets</a>
       <a href="#work">Work</a>
       <a href="#contact">Contact</a>
+      <button class="theme-toggle mobile-toggle" aria-label="Switch to dark mode" aria-pressed="false">
+        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
+        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+      </button>
     </nav>
 
     <!-- About -->
@@ -674,11 +752,9 @@ function copyEmail() {
   }).catch(() => {});
 }
 
-// ── Sparkline: candlestick + trend line signature ──
-(function () {
-  const svg = document.getElementById('sparkline');
-  const ns = 'http://www.w3.org/2000/svg';
-  const W = 700, H = 140, N = 46;
+// ── Sparkline: candlestick + trend line signature (theme-aware) ──
+const sparkSeries = (function () {
+  const N = 46;
   let series = [];
   let base = 70;
   for (let i = 0; i < N; i++) {
@@ -691,27 +767,44 @@ function copyEmail() {
     series.push({ open, close, hi, lo });
     base = close;
   }
+  return series;
+})();
 
+function renderSparkline(animate) {
+  const svg = document.getElementById('sparkline');
+  if (!svg) return;
+  const ns = 'http://www.w3.org/2000/svg';
+  const W = 700, H = 140;
+  const series = sparkSeries;
+  const step = W / series.length;
+  const styles = getComputedStyle(root);
+  const upColor = styles.getPropertyValue('--up').trim();
+  const downColor = styles.getPropertyValue('--down').trim();
+  const accentA = styles.getPropertyValue('--accent-2').trim();
+  const accentB = styles.getPropertyValue('--accent').trim();
+
+  svg.innerHTML = '';
+
+  const defs = document.createElementNS(ns, 'defs');
   const grad = document.createElementNS(ns, 'linearGradient');
   grad.setAttribute('id', 'lineGrad');
   grad.setAttribute('x1', '0'); grad.setAttribute('x2', '1'); grad.setAttribute('y1', '0'); grad.setAttribute('y2', '0');
-  grad.innerHTML = '<stop offset="0%" stop-color="#0f766e"/><stop offset="100%" stop-color="#0369a1"/>';
-  const defs = document.createElementNS(ns, 'defs');
+  grad.innerHTML = '<stop offset="0%" stop-color="' + accentA + '"/><stop offset="100%" stop-color="' + accentB + '"/>';
   defs.appendChild(grad);
   svg.appendChild(defs);
 
-  const step = W / N;
   const candleGroup = document.createElementNS(ns, 'g');
   svg.appendChild(candleGroup);
 
   series.forEach((c, i) => {
     const x = i * step + step / 2;
     const up = c.close >= c.open;
-    const color = up ? 'rgba(10,122,76,0.8)' : 'rgba(185,28,28,0.75)';
+    const color = up ? upColor : downColor;
     const wick = document.createElementNS(ns, 'line');
     wick.setAttribute('x1', x); wick.setAttribute('x2', x);
     wick.setAttribute('y1', H - c.hi); wick.setAttribute('y2', H - c.lo);
     wick.setAttribute('stroke', color); wick.setAttribute('stroke-width', '1');
+    wick.setAttribute('opacity', '0.85');
     candleGroup.appendChild(wick);
 
     const body = document.createElementNS(ns, 'rect');
@@ -722,11 +815,11 @@ function copyEmail() {
     body.setAttribute('width', step * 0.56);
     body.setAttribute('height', bh);
     body.setAttribute('fill', color);
+    body.setAttribute('opacity', '0.85');
     body.setAttribute('rx', '1');
     candleGroup.appendChild(body);
   });
 
-  // trend line across closes
   let d = '';
   series.forEach((c, i) => {
     const x = i * step + step / 2;
@@ -744,15 +837,35 @@ function copyEmail() {
   svg.appendChild(path);
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!prefersReduced) {
+  if (animate && !prefersReduced) {
     const len = path.getTotalLength();
     path.style.strokeDasharray = len;
     path.style.strokeDashoffset = len;
-    const spark = document.createElement('style');
-    document.head.appendChild(spark);
     path.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 1800, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'forwards' });
   }
-})();
+}
+
+// ── Theme toggle ──
+const root = document.documentElement;
+const toggles = document.querySelectorAll('.theme-toggle');
+function applyTheme(theme, animateChart) {
+  if (theme === 'dark') root.setAttribute('data-theme', 'dark');
+  else root.removeAttribute('data-theme');
+  toggles.forEach(t => {
+    t.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    t.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+  });
+  document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#080b11' : '#f5f8fb');
+  renderSparkline(animateChart);
+}
+const savedTheme = localStorage.getItem('jd-theme');
+const initialTheme = savedTheme || 'light';
+applyTheme(initialTheme, true);
+toggles.forEach(t => t.addEventListener('click', () => {
+  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('jd-theme', next);
+  applyTheme(next, false);
+}));
 </script>
 </body>
 </html>
