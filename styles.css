@@ -213,38 +213,97 @@ img, video { display: block; max-width: 100%; }
   background: transparent;
   padding: 0.6rem;
   cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+.menu-toggle:hover {
+  border-color: rgba(127, 212, 232, 0.5);
+  background: var(--surface-2);
 }
 @media (min-width: 768px) { .menu-toggle { display: none; } }
-.menu-toggle span { display: block; height: 1px; width: 1rem; background: currentColor; }
+.menu-toggle span {
+  display: block;
+  height: 1.5px;
+  width: 1.125rem;
+  background: currentColor;
+  border-radius: 2px;
+  transform-origin: center;
+  transition: transform 0.35s var(--ease-out-expo), opacity 0.2s ease;
+}
+/* Morph into X when open */
+.menu-toggle[aria-expanded="true"] span:first-child {
+  transform: translateY(calc(0.35rem + 0.75px)) rotate(45deg);
+}
+.menu-toggle[aria-expanded="true"] span:last-child {
+  transform: translateY(calc(-0.35rem - 0.75px)) rotate(-45deg);
+}
 
 .nav-mobile {
-  /* Always hidden by default; only shown when [hidden] attribute is removed via JS. */
+  /* Always hidden by default; JS removes [hidden] to show it. */
   display: none !important;
   flex-direction: column;
   border-top: 1px solid var(--hairline);
-  background: rgba(23, 25, 31, 0.95);
-  backdrop-filter: blur(20px);
-  padding: 1rem 1.5rem;
+  background: rgba(17, 19, 24, 0.97);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  padding: 0.75rem 1.5rem 1.25rem;
   overflow: hidden;
+  z-index: 49;
 }
 /* Show and animate when [hidden] is removed by JS */
 .nav-mobile:not([hidden]) {
   display: flex !important;
-  animation: slideDown 0.25s var(--ease-out-expo);
+  animation: slideDown 0.3s var(--ease-out-expo);
 }
 @media (min-width: 768px) { .nav-mobile { display: none !important; } }
 
 @keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
+  from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+
+/* Nav link base — starts invisible for stagger animation */
 .nav-mobile a {
-  padding: 0.65rem 0;
-  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 0;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--muted-foreground);
+  border-bottom: 1px solid var(--hairline);
+  transition: color 0.2s, padding-left 0.25s var(--ease-out-expo);
+  opacity: 0;
+  transform: translateX(-12px);
+  animation: linkIn 0.35s var(--ease-out-expo) forwards;
 }
-.nav-mobile a:hover { color: var(--foreground); }
+.nav-mobile a:last-child { border-bottom: none; }
+.nav-mobile a:hover { color: var(--primary); padding-left: 0.35rem; }
+
+/* Staggered delays */
+.nav-mobile:not([hidden]) a:nth-child(1) { animation-delay: 0.06s; }
+.nav-mobile:not([hidden]) a:nth-child(2) { animation-delay: 0.11s; }
+.nav-mobile:not([hidden]) a:nth-child(3) { animation-delay: 0.16s; }
+.nav-mobile:not([hidden]) a:nth-child(4) { animation-delay: 0.21s; }
+.nav-mobile:not([hidden]) a:nth-child(5) { animation-delay: 0.26s; }
+.nav-mobile:not([hidden]) a:nth-child(6) { animation-delay: 0.31s; }
+
+@keyframes linkIn {
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ---------- nav backdrop ---------- */
+.nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(5, 7, 13, 0.6);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: fadeIn 0.25s ease;
+}
+.nav-backdrop:not([hidden]) { display: block; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 /* ---------- hero ---------- */
 .hero {

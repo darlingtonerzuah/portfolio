@@ -9,17 +9,41 @@ window.addEventListener('scroll', onScroll, { passive: true });
 
 // Mobile nav toggle
 const menuToggle = document.getElementById('menu-toggle');
-const mobileNav = document.getElementById('mobile-nav');
+const mobileNav  = document.getElementById('mobile-nav');
+const backdrop   = document.getElementById('nav-backdrop');
+
+function openNav() {
+  mobileNav.hidden = false;
+  backdrop.hidden  = false;
+  menuToggle.setAttribute('aria-expanded', 'true');
+  document.body.style.overflow = 'hidden'; // prevent page scroll while open
+}
+
+function closeNav() {
+  mobileNav.hidden = true;
+  backdrop.hidden  = true;
+  menuToggle.setAttribute('aria-expanded', 'false');
+  document.body.style.overflow = '';
+}
+
 menuToggle.addEventListener('click', () => {
-  const isOpen = !mobileNav.hidden;
-  mobileNav.hidden = isOpen;
-  menuToggle.setAttribute('aria-expanded', String(!isOpen));
+  mobileNav.hidden ? openNav() : closeNav();
 });
+
+// Close when a nav link is tapped
 mobileNav.querySelectorAll('a').forEach((a) => {
-  a.addEventListener('click', () => {
-    mobileNav.hidden = true;
-    menuToggle.setAttribute('aria-expanded', 'false');
-  });
+  a.addEventListener('click', closeNav);
+});
+
+// Close when backdrop is tapped
+backdrop.addEventListener('click', closeNav);
+
+// Close on Escape key (accessibility)
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && !mobileNav.hidden) {
+    closeNav();
+    menuToggle.focus(); // return focus to the trigger
+  }
 });
 
 // Scroll reveal
