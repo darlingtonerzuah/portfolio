@@ -604,7 +604,7 @@ img, video { display: block; max-width: 100%; }
   pointer-events: none;
 }
 .contact-wrap { position: relative; max-width: 56rem; text-align: center; }
-.contact-logo { margin: 0 auto; width: 14rem; border-radius: 0.75rem; }
+.contact-logo { margin: 0 auto; width: auto; max-width: 11rem; height: auto; object-fit: contain; border-radius: 0.75rem; display: block; }
 .contact-ctas { margin-top: 2.5rem; display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; }
 .contact-email { margin-top: 2rem; font-family: var(--font-mono); font-size: 0.875rem; color: var(--muted-foreground); }
 
