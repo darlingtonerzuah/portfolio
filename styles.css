@@ -407,7 +407,6 @@ img, video { display: block; max-width: 100%; }
 
 .case-grid { display: grid; gap: 2.5rem; align-items: center; }
 @media (min-width: 1024px) { .case-grid { grid-template-columns: 1.55fr 1fr; gap: 4rem; } }
-.case-flip { }
 @media (min-width: 1024px) { .case-flip > *:first-child { order: 2; } }
 
 .case-media { border-radius: 1rem; overflow: hidden; background: rgba(23,25,31,0.7); }
