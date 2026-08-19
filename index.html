@@ -1,872 +1,458 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="google-site-verification" content="JzT1PenLhTDzJPyzb0jOtvMFDz080fyI8XUNlMPPp-4" />
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Joseph Darlington — Software & Automation Developer, Web Developer, and Professional Trader. Building intelligent systems, bots, dashboards, and trading tools.">
-<meta name="keywords" content="Joseph Darlington, Joseph Erzuah, Software Developer, Web Developer, Automation, AI Developer, Professional Trader, Python, Flask, Ghana">
-<meta name="theme-color" content="#f5f8fb">
-<link rel="icon" type="image/png" href="assets/logo.png">
-<title>Joseph Darlington — Developer &amp; Trader</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  :root {
-    --bg: #f5f8fb;
-    --bg2: #eaf1f8;
-    --surface: #ffffff;
-    --surface-hover: #eef3f9;
-    --border: rgba(13, 31, 54, 0.09);
-    --border-strong: rgba(13, 31, 54, 0.18);
-    --fg: #0d1b2a;
-    --muted: #48607a;
-    --muted-dim: #5f7690;
-    --accent: #0369a1;
-    --accent-2: #0f766e;
-    --accent-soft: rgba(3, 105, 161, 0.08);
-    --up: #0a7a4c;
-    --down: #b91c1c;
-    --shadow-1: 0 1px 2px rgba(13,31,54,0.04);
-    --shadow-2: 0 10px 24px rgba(13,31,54,0.08);
-    --shadow-panel: 0 1px 3px rgba(13,31,54,0.05);
-    --glow-1: rgba(3,105,161,0.055);
-    --glow-2: rgba(15,118,110,0.045);
-    --glow-market: rgba(15,118,110,0.08);
-    --glow-contact: rgba(3,105,161,0.07);
-    --logo-shadow: rgba(13,31,54,0.14);
-    --btn-primary-fg: #ffffff;
-    --btn-primary-hover-bg: #04588a;
-    --btn-primary-hover-shadow: rgba(3,105,161,0.28);
-    --bar-bg: rgba(245,248,251,0.92);
-    --selection-bg: rgba(3,105,161,0.16);
-    --dot-shadow: rgba(10,122,76,0.16);
-    --nav-hover-bg: rgba(13,31,54,0.04);
-    --sidebar-w: 380px;
-    --content-max: 720px;
-    --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  [data-theme="dark"] {
-    --bg: #080b11;
-    --bg2: #0c1019;
-    --surface: #10151f;
-    --surface-hover: #141b28;
-    --border: rgba(148, 172, 204, 0.14);
-    --border-strong: rgba(148, 172, 204, 0.26);
-    --fg: #eef2f8;
-    --muted: #97a5ba;
-    --muted-dim: #6c7893;
-    --accent: #38d4c9;
-    --accent-2: #5b8def;
-    --accent-soft: rgba(56, 212, 201, 0.12);
-    --up: #3ecf8e;
-    --down: #f2685f;
-    --shadow-1: 0 1px 2px rgba(0,0,0,0.3);
-    --shadow-2: 0 14px 30px rgba(0,0,0,0.4);
-    --shadow-panel: 0 10px 26px rgba(0,0,0,0.28);
-    --glow-1: rgba(56, 212, 201, 0.10);
-    --glow-2: rgba(91, 141, 239, 0.08);
-    --glow-market: rgba(56, 212, 201, 0.10);
-    --glow-contact: rgba(56, 212, 201, 0.10);
-    --logo-shadow: rgba(56, 212, 201, 0.18);
-    --btn-primary-fg: #06231f;
-    --btn-primary-hover-bg: #4ee4d8;
-    --btn-primary-hover-shadow: rgba(56,212,201,0.25);
-    --bar-bg: rgba(8,11,17,0.9);
-    --selection-bg: rgba(56, 212, 201, 0.32);
-    --dot-shadow: rgba(62,207,142,0.18);
-    --nav-hover-bg: rgba(255,255,255,0.02);
-  }
-
-  html { scroll-behavior: smooth; }
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
-  }
-
-  ::selection { background: var(--selection-bg); color: var(--fg); }
-
-  body {
-    background: var(--bg);
-    transition: background 0.35s var(--ease);
-    color: var(--fg);
-    font-family: 'Inter', sans-serif;
-    line-height: 1.65;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(680px circle at 12% -8%, var(--glow-1), transparent 60%),
-      radial-gradient(560px circle at 100% 30%, var(--glow-2), transparent 55%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  a { color: inherit; }
-  img { display: block; max-width: 100%; }
-
-  h1, h2, h3 { font-family: 'Space Grotesk', sans-serif; letter-spacing: -0.02em; text-wrap: balance; }
-
-  .mono { font-family: 'JetBrains Mono', monospace; }
-
-  .wrap {
-    position: relative;
-    z-index: 1;
-    max-width: 1360px;
-    margin: 0 auto;
-    display: flex;
-    align-items: flex-start;
-  }
-
-  /* ── SIDEBAR ── */
-  aside.sidebar {
-    width: var(--sidebar-w);
-    flex-shrink: 0;
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    padding: 56px 48px 40px;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 34px;
-  }
-
-  .brand img {
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    box-shadow: 0 0 0 1px var(--border-strong), 0 6px 16px var(--logo-shadow);
-  }
-
-  .brand-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--fg); line-height: 1.2; }
-  .brand-role { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--accent); letter-spacing: 0.04em; margin-top: 2px; }
-
-  .sidebar h1 {
-    font-size: 2.15rem;
-    font-weight: 700;
-    line-height: 1.08;
-    margin-bottom: 14px;
-  }
-
-  .role-line {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.92rem;
-    color: var(--accent);
-    min-height: 24px;
-    margin-bottom: 18px;
-  }
-  .role-line .cursor { display: inline-block; width: 7px; background: var(--accent); animation: blink 1s step-end infinite; margin-left: 2px; height: 1em; vertical-align: -0.15em; }
-  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-
-  .sidebar p.desc {
-    color: var(--muted);
-    font-size: 0.92rem;
-    max-width: 320px;
-    margin-bottom: 34px;
-  }
-
-  nav.side-nav { display: flex; flex-direction: column; gap: 4px; margin-bottom: auto; }
-  nav.side-nav a {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-    padding: 9px 10px;
-    border-radius: 8px;
-    color: var(--muted-dim);
-    font-size: 0.78rem;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition: color 0.2s var(--ease), background 0.2s var(--ease);
-  }
-  nav.side-nav a .dash {
-    width: 22px;
-    height: 1px;
-    background: var(--muted-dim);
-    transition: width 0.25s var(--ease), background 0.25s var(--ease);
-  }
-  nav.side-nav a:hover, nav.side-nav a.active { color: var(--fg); background: var(--nav-hover-bg); }
-  nav.side-nav a:hover .dash, nav.side-nav a.active .dash { width: 38px; background: var(--accent); }
-
-  .sidebar-footer { padding-top: 28px; }
-  .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-  .socials { display: flex; gap: 18px; }
-  .socials a {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    text-decoration: none;
-    color: var(--muted);
-    transition: all 0.25s var(--ease);
-  }
-  .socials a:hover { color: var(--accent); border-color: var(--accent); transform: translateY(-3px); background: var(--accent-soft); }
-  .socials svg { width: 17px; height: 17px; }
-
-  .theme-toggle {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    transition: all 0.25s var(--ease);
-    margin-top: 18px;
-    flex-shrink: 0;
-  }
-  .theme-toggle:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
-  .theme-toggle svg { width: 17px; height: 17px; }
-  .theme-toggle .ico-moon { display: none; }
-  [data-theme="dark"] .theme-toggle .ico-sun { display: none; }
-  [data-theme="dark"] .theme-toggle .ico-moon { display: block; }
-
-  .avail {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem; color: var(--up);
-    margin-top: 22px; letter-spacing: 0.03em;
-  }
-  .avail .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--up); box-shadow: 0 0 0 3px var(--dot-shadow); animation: pulseDot 2s ease-in-out infinite; }
-  @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-
-  /* ── MAIN CONTENT ── */
-  main.content {
-    flex: 1;
-    min-width: 0;
-    padding: 120px 56px 100px 0;
-  }
-
-  section { max-width: var(--content-max); margin-bottom: 130px; scroll-margin-top: 40px; }
-  section:last-of-type { margin-bottom: 60px; }
-
-  .eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--accent);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .eyebrow::after { content: ''; flex: 1; max-width: 60px; height: 1px; background: linear-gradient(90deg, var(--accent), transparent); }
-
-  .section-title { font-size: 1.7rem; font-weight: 700; margin-bottom: 22px; }
-
-  .lede { color: var(--muted); font-size: 1rem; max-width: 62ch; }
-  .lede + .lede { margin-top: 14px; }
-
-  /* reveal */
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s var(--ease), transform 0.7s var(--ease); }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ── ABOUT FACTS ── */
-  .facts {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    margin-top: 30px;
-  }
-  .fact {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 18px;
-    background: var(--surface);
-    box-shadow: var(--shadow-1);
-  }
-  .fact-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--muted-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
-  .fact-value { font-size: 0.92rem; font-weight: 600; color: var(--fg); }
-
-  /* ── SKILLS ── */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-  .skill-card {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 22px 22px 20px;
-    background: var(--surface);
-    box-shadow: var(--shadow-1);
-    transition: border-color 0.25s var(--ease), transform 0.25s var(--ease), box-shadow 0.25s var(--ease);
-  }
-  .skill-card:hover { border-color: var(--border-strong); transform: translateY(-3px); box-shadow: var(--shadow-2); }
-  .skill-card h3 { font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--fg); margin-bottom: 12px; display: flex; align-items: center; gap: 9px; }
-  .skill-card h3 .ico { width: 8px; height: 8px; border-radius: 2px; background: var(--accent); flex-shrink: 0; }
-  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .skill-tags span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--muted);
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    padding: 4px 9px;
-    border-radius: 6px;
-  }
-
-  /* ── MARKETS (signature section) ── */
-  .markets-panel {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    background: linear-gradient(165deg, var(--surface), var(--bg2));
-    padding: 30px 30px 22px;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-panel);
-  }
-  .markets-panel::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(360px circle at 90% 0%, var(--glow-market), transparent 60%);
-    pointer-events: none;
-  }
-  .markets-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap; margin-bottom: 18px; }
-  .markets-top h3 { font-size: 1.05rem; margin-bottom: 6px; }
-  .ticker-row { display: flex; gap: 18px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
-  .ticker-row .up { color: var(--up); }
-  .ticker-row .down { color: var(--down); }
-  #sparkline { width: 100%; height: 140px; display: block; }
-  .markets-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 18px; position: relative; z-index: 1; }
-  .markets-tags span {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--fg);
-    background: rgba(15, 118, 110, 0.07);
-    border: 1px solid rgba(15, 118, 110, 0.28);
-    padding: 5px 11px;
-    border-radius: 999px;
-  }
-
-  /* ── PROJECTS ── */
-  .project-row {
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 20px;
-    padding: 26px 0;
-    border-top: 1px solid var(--border);
-    position: relative;
-  }
-  .project-row:last-child { border-bottom: 1px solid var(--border); }
-  .project-num { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--muted-dim); padding-top: 3px; }
-  .project-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
-  .project-head h3 { font-size: 1.08rem; font-weight: 600; }
-  .status {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.62rem;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    padding: 3px 9px;
-    border-radius: 999px;
-    color: var(--accent);
-    border: 1px solid rgba(3, 105, 161, 0.3);
-    background: rgba(3, 105, 161, 0.07);
-  }
-  .status.dev { color: var(--accent-2); border-color: rgba(15,118,110,0.35); background: rgba(15,118,110,0.08); }
-  .status.mvp { color: var(--muted); border-color: var(--border-strong); background: transparent; }
-
-  .project-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 14px; max-width: 60ch; }
-  .tech-row { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
-  .tech-row span { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; color: var(--muted-dim); }
-  .tech-row span:not(:last-child)::after { content: '·'; margin-left: 7px; color: var(--muted-dim); }
-  .project-link {
-    display: inline-flex; align-items: center; gap: 7px;
-    text-decoration: none;
-    color: var(--fg);
-    font-size: 0.82rem;
-    font-weight: 600;
-    border-bottom: 1px solid var(--border-strong);
-    padding-bottom: 2px;
-    transition: color 0.2s, border-color 0.2s, gap 0.2s;
-  }
-  .project-link:hover { color: var(--accent); border-color: var(--accent); gap: 11px; }
-
-  /* ── CONTACT ── */
-  .contact-card {
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 42px;
-    background: var(--surface);
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--shadow-panel);
-  }
-  .contact-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(420px circle at 100% 100%, var(--glow-contact), transparent 60%);
-    pointer-events: none;
-  }
-  .contact-card h2 { font-size: 1.6rem; margin-bottom: 12px; position: relative; }
-  .contact-card p { color: var(--muted); max-width: 46ch; margin-bottom: 26px; position: relative; }
-  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; position: relative; }
-  .btn-primary, .btn-ghost {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 0.86rem;
-    padding: 13px 24px;
-    border-radius: 10px;
-    text-decoration: none;
-    display: inline-flex; align-items: center; gap: 8px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all 0.25s var(--ease);
-  }
-  .btn-primary { background: var(--accent); color: var(--btn-primary-fg); }
-  .btn-primary:hover { background: var(--btn-primary-hover-bg); transform: translateY(-2px); box-shadow: 0 10px 24px var(--btn-primary-hover-shadow); }
-  .btn-ghost { border-color: var(--border-strong); color: var(--fg); background: transparent; }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  footer.site-footer {
-    max-width: var(--content-max);
-    color: var(--muted-dim);
-    font-size: 0.78rem;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-  }
-
-  .toast {
-    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--surface); border: 1px solid var(--border-strong);
-    color: var(--fg); padding: 12px 20px; border-radius: 10px;
-    font-size: 0.82rem; opacity: 0; pointer-events: none;
-    transition: all 0.3s var(--ease); z-index: 2000;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  /* ── MOBILE NAV ── */
-  .mobile-bar { display: none; }
-
-  @media (max-width: 980px) {
-    .wrap { flex-direction: column; }
-    aside.sidebar {
-      position: relative;
-      height: auto;
-      width: 100%;
-      padding: 28px 24px 20px;
-    }
-    nav.side-nav { display: none; }
-    .sidebar-footer { padding-top: 18px; }
-    .sidebar p.desc { max-width: 100%; }
-    main.content { padding: 40px 24px 80px; width: 100%; }
-    .facts, .skills-grid { grid-template-columns: 1fr; }
-    section { margin-bottom: 80px; }
-
-    .mobile-bar {
-      display: flex;
-      position: sticky; top: 0; z-index: 500;
-      background: var(--bar-bg);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      overflow-x: auto;
-    }
-    .mobile-bar a {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.68rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--muted);
-      text-decoration: none;
-      white-space: nowrap;
-    }
-    .mobile-bar a.active { color: var(--accent); }
-    .mobile-toggle { margin-top: 0; margin-left: auto; flex-shrink: 0; }
-  }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Joseph Darlington — Web, Software & Automation Developer</title>
+  <meta name="description" content="Joseph Darlington builds premium websites, custom software and automation systems for businesses in Ghana and beyond. Web development, web design, AI tools and bots." />
+  <meta name="author" content="Joseph Darlington" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Joseph Darlington — Web, Software & Automation Developer" />
+  <meta property="og:description" content="Premium websites, custom software and automation systems by Joseph Darlington." />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="icon" type="image/png" href="/assets/favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to content</a>
 
-<div class="wrap">
+  <header id="site-header" class="site-header">
+    <div class="wrap header-inner">
+      <a href="#top" class="brand">
+        <img src="/assets/logo.png" alt="Joseph Darlington logo" width="140" height="36" class="brand-logo" />
+        <span class="brand-name">Joseph Darlington</span>
+      </a>
 
-  <aside class="sidebar">
-    <div>
-      <div class="brand">
-        <img src="assets/logo.png" alt="Joseph Darlington logo">
-        <div>
-          <div class="brand-name">Joseph Darlington</div>
-          <div class="brand-role">TECHNOLOGY · TRADING</div>
-        </div>
-      </div>
-
-      <h1>Joseph<br>Darlington</h1>
-      <div class="role-line"><span class="role-text"></span><span class="cursor"></span></div>
-      <p class="desc">Computer Science student at UENR, based in Ghana. I build automation systems, AI tools, and web platforms — and bring the same discipline to reading financial markets.</p>
-
-      <nav class="side-nav" aria-label="Section navigation">
-        <a href="#about"><span class="dash"></span>About</a>
-        <a href="#skills"><span class="dash"></span>Skills</a>
-        <a href="#markets"><span class="dash"></span>Markets</a>
-        <a href="#work"><span class="dash"></span>Work</a>
-        <a href="#contact"><span class="dash"></span>Contact</a>
+      <nav class="nav-desktop" aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#products">Products</a>
+        <a href="#stack">Stack</a>
+        <a href="#about">About</a>
       </nav>
-    </div>
 
-    <div class="sidebar-footer">
-      <div class="avail"><span class="dot"></span>AVAILABLE FOR PROJECTS</div>
-      <div class="footer-row">
-        <div class="socials" style="margin-top:18px;">
-          <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.73.5.5 5.73.5 12c0 5.09 3.29 9.4 7.86 10.93.58.1.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.52-1.34-1.28-1.7-1.28-1.7-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.56-.29-5.26-1.28-5.26-5.71 0-1.26.45-2.29 1.19-3.09-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.64 1.59.24 2.77.12 3.06.74.8 1.19 1.83 1.19 3.09 0 4.44-2.71 5.42-5.28 5.7.41.36.78 1.08.78 2.18 0 1.58-.01 2.85-.01 3.24 0 .31.21.67.8.56A10.52 10.52 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5Z"/></svg>
-          </a>
-          <a href="mailto:darlingtonerzuah@gmail.com" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>
-          </a>
-          <a href="https://t.me/Joseph_126" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.5 3.5 2.6 10.9c-1.2.5-1.2 1.2-.2 1.5l4.8 1.5 1.8 5.6c.2.6.4.8.9.8s.7-.2 1-.5l2.4-2.3 4.9 3.6c.9.5 1.6.2 1.8-.9l3.3-15.4c.3-1.3-.5-1.9-1.8-1.4Zm-12 11.2-1.6-5 10.7-6.7c.5-.3.9-.1.6.3L9.5 14.7Z"/></svg>
-          </a>
-        </div>
-        <button id="theme-toggle" class="theme-toggle" aria-label="Switch to dark mode" aria-pressed="false">
-          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
-          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
+      <div class="header-actions">
+        <a href="#contact" class="btn-primary header-cta">Start a project</a>
+        <button type="button" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false" class="menu-toggle">
+          <span></span>
+          <span></span>
         </button>
       </div>
     </div>
-  </aside>
 
-  <main class="content">
-
-    <!-- Mobile nav -->
-    <nav class="mobile-bar" aria-label="Mobile section navigation">
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#markets">Markets</a>
+    <nav id="mobile-nav" class="nav-mobile" aria-label="Mobile" hidden>
+      <a href="#services">Services</a>
       <a href="#work">Work</a>
+      <a href="#products">Products</a>
+      <a href="#stack">Stack</a>
+      <a href="#about">About</a>
       <a href="#contact">Contact</a>
-      <button class="theme-toggle mobile-toggle" aria-label="Switch to dark mode" aria-pressed="false">
-        <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M4.6 4.6l1.7 1.7M17.7 17.7l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.6 19.4l1.7-1.7M17.7 6.3l1.7-1.7"/></svg>
-        <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a6.8 6.8 0 0 0 10.5 10.5Z"/></svg>
-      </button>
     </nav>
+  </header>
 
-    <!-- About -->
-    <section id="about" class="reveal">
-      <div class="eyebrow">01 · About</div>
-      <p class="lede">I'm a software and automation developer building intelligent systems — Telegram bots, AI-driven dashboards, and cross-platform apps — for real-world problems in Ghana and beyond. Outside of code, I trade financial markets professionally, applying the same rigor I bring to engineering: hypothesis, backtest, execute, review.</p>
-      <p class="lede">That dual background shapes how I build: systems that handle live, noisy, real-time data — market feeds, sensor data, user input — without falling over.</p>
-      <div class="facts">
-        <div class="fact"><div class="fact-label">Focus</div><div class="fact-value">Automation · AI · Web · Trading</div></div>
-        <div class="fact"><div class="fact-label">Education</div><div class="fact-value">B.Sc. Computer Science, UENR</div></div>
-        <div class="fact"><div class="fact-label">Based in</div><div class="fact-value">Ghana</div></div>
-        <div class="fact"><div class="fact-label">Working style</div><div class="fact-value">Per-project & ongoing contracts</div></div>
+  <main id="main">
+
+    <!-- HERO -->
+    <section id="top" class="hero">
+      <div class="grid-backdrop" aria-hidden="true"></div>
+
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow"><span class="dot"></span>Available for new projects · Kumasi, Ghana</p>
+
+          <h1 class="hero-title">
+            Software, websites<br />
+            and automations<br />
+            <span class="muted">built to perform.</span>
+          </h1>
+
+          <p class="hero-lede">
+            I'm Joseph Darlington — a software and web developer in Kumasi, Ghana. I design and
+            engineer high-end websites, custom business software and automation systems that remove
+            manual work and make small teams operate like serious companies.
+          </p>
+
+          <div class="hero-ctas">
+            <a href="#contact" class="btn-primary">Start a project</a>
+            <a href="#work" class="btn-ghost">See recent work</a>
+          </div>
+
+          <ul class="disciplines">
+            <li>Web Development</li>
+            <li>Software Development</li>
+            <li>Automation Systems</li>
+            <li>Web Design</li>
+          </ul>
+        </div>
+
+        <div class="hero-portrait-wrap">
+          <figure class="hero-portrait panel">
+            <img src="/assets/joseph.png" alt="Portrait of Joseph Darlington, software and web developer" class="portrait" width="800" height="1000" loading="eager" />
+            <figcaption class="hero-caption">
+              <p class="hero-caption-name">Joseph Darlington</p>
+              <p class="hero-caption-tag">Technology · Innovation · Leadership</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <dl class="stats">
+        <div class="stat">
+          <dt>6+</dt>
+          <dd>Client & product builds shipped</dd>
+        </div>
+        <div class="stat">
+          <dt>24h</dt>
+          <dd>Typical reply time</dd>
+        </div>
+        <div class="stat">
+          <dt>100%</dt>
+          <dd>Hand-written code, no builders</dd>
+        </div>
+      </dl>
+    </section>
+
+    <!-- SERVICES -->
+    <section id="services" class="section wrap">
+      <div class="reveal">
+        <p class="section-label"><span>01</span><span class="rule"></span>What I do</p>
+        <h2 class="section-title">Four disciplines, <span class="text-gradient">one standard</span>.</h2>
+        <p class="section-sub">
+          Every engagement is handled end to end — strategy, design, engineering and deployment — so
+          nothing gets lost between people.
+        </p>
+      </div>
+
+      <div class="services-grid">
+        <article class="panel card reveal">
+          <div class="card-top">
+            <h3>Web Development</h3>
+            <span class="no">01</span>
+          </div>
+          <p>Fast, accessible, production-grade websites and web apps — built from scratch, no page-builder bloat, tuned for Core Web Vitals and real conversions.</p>
+          <ul class="dot-list">
+            <li>Marketing & business sites</li>
+            <li>Web apps & dashboards</li>
+            <li>APIs & integrations</li>
+          </ul>
+        </article>
+
+        <article class="panel card reveal" style="transition-delay:90ms">
+          <div class="card-top">
+            <h3>Software Development</h3>
+            <span class="no">02</span>
+          </div>
+          <p>Custom software that fits the way a business actually runs: internal tools, data pipelines, mobile and desktop apps, and AI-assisted features.</p>
+          <ul class="dot-list">
+            <li>Custom internal tools</li>
+            <li>Mobile & desktop apps</li>
+            <li>AI / LLM integrations</li>
+          </ul>
+        </article>
+
+        <article class="panel card reveal" style="transition-delay:180ms">
+          <div class="card-top">
+            <h3>Automations</h3>
+            <span class="no">03</span>
+          </div>
+          <p>Repetitive work removed. Bots, schedulers, scrapers and workflows that quietly run the boring parts of the business while you sleep.</p>
+          <ul class="dot-list">
+            <li>Telegram & WhatsApp bots</li>
+            <li>Scheduled workflows</li>
+            <li>Scraping & reporting</li>
+          </ul>
+        </article>
+
+        <article class="panel card reveal" style="transition-delay:270ms">
+          <div class="card-top">
+            <h3>Web Design</h3>
+            <span class="no">04</span>
+          </div>
+          <p>Interface and brand design with a premium finish — typography, hierarchy, motion and detail that make a small business look like a serious one.</p>
+          <ul class="dot-list">
+            <li>UI & landing page design</li>
+            <li>Design systems</li>
+            <li>Brand-led visual identity</li>
+          </ul>
+        </article>
       </div>
     </section>
 
-    <!-- Skills -->
-    <section id="skills" class="reveal">
-      <div class="eyebrow">02 · Skills</div>
-      <h2 class="section-title">What I work with</h2>
-      <div class="skills-grid">
-        <div class="skill-card">
-          <h3><span class="ico"></span>Backend</h3>
-          <div class="skill-tags"><span>Python</span><span>Flask</span><span>FastAPI</span><span>REST APIs</span><span>SQLite</span><span>PostgreSQL</span><span>JWT Auth</span><span>Web Scraping</span></div>
+    <!-- WORK -->
+    <section id="work" class="work-section">
+      <div class="wrap">
+        <div class="reveal">
+          <p class="section-label"><span>02</span><span class="rule"></span>Selected work</p>
+          <h2 class="section-title big">Client websites, <span class="text-gradient">shipped and live</span>.</h2>
+          <p class="section-sub">
+            Real builds, recorded end to end. Press play to walk through each site the way a customer
+            would.
+          </p>
         </div>
-        <div class="skill-card">
-          <h3><span class="ico"></span>AI / ML</h3>
-          <div class="skill-tags"><span>Groq API</span><span>OpenAI</span><span>LLM Prompting</span><span>OpenCV</span><span>Time Series</span><span>ARIMA Models</span></div>
+      </div>
+
+      <div class="case-studies">
+        <article class="case wrap reveal">
+          <div class="case-grid">
+            <div class="case-media panel">
+              <video src="/assets/darlington-motors.mp4" poster="/assets/motors-poster.jpg" controls muted loop playsinline preload="none" title="Website walkthrough — Darlington Motors" aria-label="Website walkthrough video for Darlington Motors"></video>
+            </div>
+            <div class="case-info">
+              <div class="case-heading">
+                <span class="case-index">01</span>
+                <p class="case-sector">Automotive dealership · Kumasi</p>
+              </div>
+              <h3 class="case-client">Darlington Motors</h3>
+              <p class="case-summary">A trust-first dealership website: inspected inventory listings, straight pricing, and a WhatsApp-led enquiry flow that turns browsers into showroom visits.</p>
+              <ul class="case-highlights">
+                <li>Inventory browsing with filtering and detail views</li>
+                <li>One-tap WhatsApp enquiry on every vehicle</li>
+                <li>Editorial layout built for credibility and clarity</li>
+              </ul>
+              <div class="tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">Responsive UI</span>
+                <span class="tag tag-year">2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="case wrap reveal" style="transition-delay:100ms">
+          <div class="case-grid case-flip">
+            <div class="case-media panel">
+              <video src="/assets/naoy-luxe.mp4" poster="/assets/naoy-poster.jpg" controls muted loop playsinline preload="none" title="Website walkthrough — NAOY Luxe" aria-label="Website walkthrough video for NAOY Luxe"></video>
+            </div>
+            <div class="case-info">
+              <div class="case-heading">
+                <span class="case-index">02</span>
+                <p class="case-sector">Bespoke tailoring · Kumasi</p>
+              </div>
+              <h3 class="case-client">NAOY Luxe</h3>
+              <p class="case-summary">A luxury tailoring house online — gold-on-charcoal art direction, category storytelling, a booking flow for fittings, and a live chat entry point.</p>
+              <ul class="case-highlights">
+                <li>Cinematic portfolio and category galleries</li>
+                <li>Book-a-fitting flow with direct call-to-action</li>
+                <li>Premium type system and motion detailing</li>
+              </ul>
+              <div class="tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">Motion design</span>
+                <span class="tag tag-year">2026</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section id="products" class="section wrap">
+      <div class="reveal">
+        <p class="section-label"><span>03</span><span class="rule"></span>Software & automation</p>
+        <h2 class="section-title">Systems I've engineered <span class="text-gradient">from zero</span>.</h2>
+      </div>
+
+      <div class="products-grid">
+        <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noreferrer" class="panel card card-link reveal">
+          <div class="card-top">
+            <h3>JARVIS v6.1+</h3>
+            <span class="status">Active</span>
+          </div>
+          <p>Telegram-controlled Windows AI assistant — natural language commands, ~120-app control, voice I/O, screen vision, webcam capture, system monitoring and a self-evolving skill engine.</p>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">Telegram API</span>
+            <span class="tag">Groq</span>
+            <span class="tag">OpenCV</span>
+          </div>
+          <span class="view-link">View project <span class="arrow">→</span></span>
+        </a>
+
+        <a href="https://selar.com/07bh6p6w77" target="_blank" rel="noreferrer" class="panel card card-link reveal" style="transition-delay:80ms">
+          <div class="card-top">
+            <h3>WaveMap</h3>
+            <span class="status">Live on Selar</span>
+          </div>
+          <p>WiFi analytics and AR compass app — per-network signal heatmaps, live device scanning, network diagnostics and a sensor-fusion AR direction finder.</p>
+          <div class="tags">
+            <span class="tag">Flutter</span>
+            <span class="tag">Flask</span>
+            <span class="tag">Render</span>
+            <span class="tag">Sensors</span>
+          </div>
+          <span class="view-link">View project <span class="arrow">→</span></span>
+        </a>
+
+        <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noreferrer" class="panel card card-link reveal" style="transition-delay:160ms">
+          <div class="card-top">
+            <h3>XAUUSD Ensemble EA</h3>
+            <span class="status">Active</span>
+          </div>
+          <p>MQL5 + Python hybrid gold trading system — Random Forest / XGBoost ensemble exported to ONNX, live inference in a native MT5 Expert Advisor.</p>
+          <div class="tags">
+            <span class="tag">Python</span>
+            <span class="tag">MQL5</span>
+            <span class="tag">ONNX</span>
+            <span class="tag">scikit-learn</span>
+          </div>
+          <span class="view-link">View project <span class="arrow">→</span></span>
+        </a>
+
+        <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noreferrer" class="panel card card-link reveal" style="transition-delay:240ms">
+          <div class="card-top">
+            <h3>ClockVault</h3>
+            <span class="status">In dev</span>
+          </div>
+          <p>Privacy vault disguised as a functional world clock — rotary-dial auth, AES-256-CBC file encryption and a native Android app vault.</p>
+          <div class="tags">
+            <span class="tag">Flutter</span>
+            <span class="tag">Kotlin</span>
+            <span class="tag">AES-256</span>
+          </div>
+          <span class="view-link">View project <span class="arrow">→</span></span>
+        </a>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="stack" class="stack-section">
+      <div class="wrap">
+        <div class="reveal">
+          <p class="section-label"><span>04</span><span class="rule"></span>Toolkit</p>
+          <h2 class="section-title">The stack behind the work.</h2>
         </div>
-        <div class="skill-card">
-          <h3><span class="ico"></span>Web Development</h3>
-          <div class="skill-tags"><span>HTML/CSS/JS</span><span>Chart.js</span><span>Responsive Design</span><span>Dashboards</span><span>Dark UIs</span></div>
-        </div>
-        <div class="skill-card">
-          <h3><span class="ico"></span>Mobile / Desktop</h3>
-          <div class="skill-tags"><span>Flutter</span><span>Android Studio</span><span>tkinter</span><span>WebView</span><span>Cross-Platform</span></div>
-        </div>
-        <div class="skill-card">
-          <h3><span class="ico"></span>Automation</h3>
-          <div class="skill-tags"><span>Telegram Bots</span><span>WhatsApp Bots</span><span>Task Scheduling</span><span>Windows Automation</span><span>File Ops</span></div>
-        </div>
-        <div class="skill-card">
-          <h3><span class="ico"></span>Deployment</h3>
-          <div class="skill-tags"><span>GitHub Pages</span><span>Render</span><span>Ngrok</span><span>Windows Services</span><span>Git</span></div>
+
+        <div class="stack-grid">
+          <div class="stack-col reveal">
+            <h3>Frontend</h3>
+            <ul>
+              <li>HTML5</li><li>CSS3</li><li>JavaScript</li><li>React</li><li>Tailwind</li><li>Chart.js</li>
+            </ul>
+          </div>
+          <div class="stack-col reveal" style="transition-delay:70ms">
+            <h3>Backend</h3>
+            <ul>
+              <li>Python</li><li>Flask</li><li>FastAPI</li><li>REST APIs</li><li>PostgreSQL</li><li>SQLite</li>
+            </ul>
+          </div>
+          <div class="stack-col reveal" style="transition-delay:140ms">
+            <h3>Automation & AI</h3>
+            <ul>
+              <li>Telegram Bots</li><li>WhatsApp Bots</li><li>Web Scraping</li><li>Groq / OpenAI</li><li>Schedulers</li><li>OpenCV</li>
+            </ul>
+          </div>
+          <div class="stack-col reveal" style="transition-delay:210ms">
+            <h3>Apps & Delivery</h3>
+            <ul>
+              <li>Flutter</li><li>Android Studio</li><li>Git</li><li>Render</li><li>GitHub Pages</li><li>CI basics</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- Markets (signature section) -->
-    <section id="markets" class="reveal">
-      <div class="eyebrow">03 · Markets</div>
-      <h2 class="section-title">Trading &amp; Markets</h2>
-      <p class="lede" style="margin-bottom:24px;">Alongside development, I trade financial markets as a professional discipline — reading price action, managing risk, and treating every position like a hypothesis to be tested.</p>
+    <!-- ABOUT -->
+    <section id="about" class="section wrap about-grid">
+      <div class="reveal">
+        <p class="section-label"><span>05</span><span class="rule"></span>About</p>
+        <h2 class="section-title">Engineering with <span class="text-gradient">taste</span>.</h2>
+        <p class="about-p">
+          I'm a Computer Science student at UENR and a working developer based in Kumasi, Ghana.
+          I build for businesses that need software to actually earn its keep — websites that
+          convert, tools that save hours, automations that run without supervision.
+        </p>
+        <p class="about-p">
+          Everything is written by hand, reviewed for performance and accessibility, and delivered
+          with documentation. I stay reachable after launch, because a launch is the start of the
+          relationship, not the end of it.
+        </p>
 
-      <div class="markets-panel">
-        <div class="markets-top">
-          <div>
-            <h3>Price action &amp; risk-managed execution</h3>
-            <div class="ticker-row">
-              <span class="up mono">▲ trend follow</span>
-              <span class="down mono">▼ risk-off</span>
-              <span class="mono" style="color:var(--muted);">◆ position sizing</span>
+        <dl class="about-facts">
+          <div><dt>Focus</dt><dd>Web · Software · Automation · Design</dd></div>
+          <div><dt>Education</dt><dd>B.Sc. Computer Science, UENR</dd></div>
+          <div><dt>Based in</dt><dd>Kumasi, Ghana</dd></div>
+          <div><dt>Engagements</dt><dd>Per-project & retainer</dd></div>
+        </dl>
+      </div>
+
+      <div class="reveal" style="transition-delay:120ms">
+        <p class="how-i-work-label">How I work</p>
+        <div class="process-list">
+          <div class="panel process-step">
+            <span class="step-no">01</span>
+            <div>
+              <h3>Discovery</h3>
+              <p>We map the business, the customer and the one job the site or system must do. No guessing, no filler features.</p>
+            </div>
+          </div>
+          <div class="panel process-step">
+            <span class="step-no">02</span>
+            <div>
+              <h3>Design</h3>
+              <p>Structure and visual direction first — layout, typography, motion — approved before a single production line is written.</p>
+            </div>
+          </div>
+          <div class="panel process-step">
+            <span class="step-no">03</span>
+            <div>
+              <h3>Build</h3>
+              <p>Clean, hand-written code. Fast, responsive, accessible, and structured so it can grow instead of being rebuilt.</p>
+            </div>
+          </div>
+          <div class="panel process-step">
+            <span class="step-no">04</span>
+            <div>
+              <h3>Launch & care</h3>
+              <p>Deployment, analytics, and ongoing maintenance or automation work — I stay reachable after handover.</p>
             </div>
           </div>
         </div>
-        <svg id="sparkline" viewBox="0 0 700 140" preserveAspectRatio="none"></svg>
-        <div class="markets-tags">
-          <span>Technical Analysis</span>
-          <span>Price Action</span>
-          <span>Risk Management</span>
-          <span>Forex &amp; Crypto Markets</span>
-          <span>Chart Pattern Recognition</span>
-          <span>Trading Psychology</span>
-        </div>
       </div>
     </section>
 
-    <!-- Work -->
-    <section id="work" class="reveal">
-      <div class="eyebrow">04 · Selected Work</div>
-      <h2 class="section-title">Projects</h2>
+    <!-- CONTACT -->
+    <section id="contact" class="contact-section">
+      <div class="contact-glow" aria-hidden="true"></div>
+      <div class="wrap contact-wrap reveal">
+        <img src="/assets/logo.png" alt="Joseph Darlington monogram" class="contact-logo" width="220" height="56" />
+        <h2 class="section-title big">Let's build something <span class="text-gradient">worth shipping</span>.</h2>
+        <p class="section-sub center">
+          Websites, custom software, automations or a full design refresh — tell me what the
+          business needs and I'll come back with a plan, a timeline and a price.
+        </p>
 
-      <div class="project-row">
-        <div class="project-num mono">01</div>
-        <div>
-          <div class="project-head"><h3>JARVIS v3.0</h3><span class="status">Active</span></div>
-          <p class="project-desc">Telegram-based AI PC control bot with natural language processing, remote keyboard/mouse control, file operations, screenshot analysis, webcam capture, system monitoring, and security alerts.</p>
-          <div class="tech-row"><span>Python</span><span>Telegram API</span><span>Groq</span><span>OpenCV</span><span>tkinter</span></div>
-          <a href="https://github.com/darlingtonerzuah" class="project-link" target="_blank" rel="noopener noreferrer">View source →</a>
+        <div class="contact-ctas">
+          <a href="mailto:darlingtonerzuah@gmail.com" class="btn-primary">Email me</a>
+          <a href="https://wa.me/233592815799" target="_blank" rel="noreferrer" class="btn-ghost">WhatsApp</a>
+          <a href="https://t.me/Joseph_126" target="_blank" rel="noreferrer" class="btn-ghost">Telegram</a>
         </div>
-      </div>
 
-      <div class="project-row">
-        <div class="project-num mono">02</div>
-        <div>
-          <div class="project-head"><h3>Ghana Market Pulse</h3><span class="status">Production</span></div>
-          <p class="project-desc">Full-stack GSE stock prediction app — live scraping, ARIMA and linear regression models, interactive dashboards, CSV export, and community chat built on real Ghana Stock Exchange data.</p>
-          <div class="tech-row"><span>Flask</span><span>Selenium</span><span>SQLite</span><span>Chart.js</span><span>ARIMA</span></div>
-          <a href="https://github.com/darlingtonerzuah/gmp-market-predictor" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>
-        </div>
-      </div>
-
-      <div class="project-row">
-        <div class="project-num mono">03</div>
-        <div>
-          <div class="project-head"><h3>Mobile Assistant System</h3><span class="status dev">In Dev</span></div>
-          <p class="project-desc">Full-stack personal assistant: Flutter mobile app, Python Flask backend, and a tkinter desktop panel with JWT auth, Groq-powered NLP, file sync, and APScheduler automation.</p>
-          <div class="tech-row"><span>Flutter</span><span>Flask</span><span>Python</span><span>JWT</span><span>Groq</span></div>
-          <a href="mailto:darlingtonerzuah@gmail.com" class="project-link" target="_blank" rel="noopener noreferrer">Hire for custom build →</a>
-        </div>
-      </div>
-
-      <div class="project-row">
-        <div class="project-num mono">04</div>
-        <div>
-          <div class="project-head"><h3>NoteGen</h3><span class="status mvp">MVP</span></div>
-          <p class="project-desc">AI-powered study notes generator built for UENR students — lecture summaries, study guides, and practice questions, with multi-key Groq API rotation and SQLite caching.</p>
-          <div class="tech-row"><span>Flask</span><span>SQLite</span><span>Groq API</span><span>HTML/CSS/JS</span></div>
-          <a href="https://github.com/darlingtonerzuah/notegen-mvp" class="project-link" target="_blank" rel="noopener noreferrer">View source →</a>
-        </div>
-      </div>
-
-      <div class="project-row">
-        <div class="project-num mono">05</div>
-        <div>
-          <div class="project-head"><h3>WaveMap</h3><span class="status">Production</span></div>
-          <p class="project-desc">WiFi analytics and AR compass app — per-network signal heatmaps, real device scanning, network diagnostics, a sensor-fusion AR WiFi compass, and a live privacy policy. Backend deployed on Render.</p>
-          <div class="tech-row"><span>Flutter</span><span>AR</span><span>WiFi Scanning</span><span>Flask</span><span>Render</span></div>
-          <a href="https://github.com/darlingtonerzuah" class="project-link" target="_blank" rel="noopener noreferrer">View on GitHub →</a>
-        </div>
+        <p class="contact-email">darlingtonerzuah@gmail.com</p>
       </div>
     </section>
-
-    <!-- Contact -->
-    <section id="contact" class="reveal">
-      <div class="eyebrow">05 · Contact</div>
-      <div class="contact-card">
-        <h2>Let's build something</h2>
-        <p>Custom automation, bots, dashboards, or AI integrations — per-project or ongoing maintenance. Open to conversations on markets too.</p>
-        <div class="cta-row">
-          <a href="mailto:darlingtonerzuah@gmail.com" class="btn-primary">Get in touch</a>
-          <button class="btn-ghost" onclick="copyEmail()">Copy email</button>
-        </div>
-      </div>
-    </section>
-
-    <footer class="site-footer">
-      <p>© 2026 Joseph Darlington · Software &amp; Automation Developer, Web Developer, Professional Trader.</p>
-      <p style="opacity:0.7; margin-top:6px;">Built from scratch in Ghana.</p>
-    </footer>
-
   </main>
-</div>
 
-<div id="toast" class="toast">Email copied to clipboard!</div>
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p class="footer-copy">© <span id="year"></span> Joseph Darlington · Web, software & automation development.</p>
+      <div class="footer-links">
+        <a href="https://github.com/darlingtonerzuah" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://wa.me/233592815799" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a href="https://t.me/Joseph_126" target="_blank" rel="noreferrer">Telegram</a>
+        <a href="mailto:darlingtonerzuah@gmail.com">Email</a>
+      </div>
+    </div>
+  </footer>
 
-<script>
-// ── Typewriter ──
-const roles = ["Software & Automation Developer.", "Web Developer.", "Professional Trader."];
-let rIdx = 0, cIdx = 0, deleting = false;
-const roleEl = document.querySelector('.role-text');
-function typeRole() {
-  const phrase = roles[rIdx];
-  roleEl.textContent = deleting ? phrase.substring(0, cIdx - 1) : phrase.substring(0, cIdx + 1);
-  cIdx += deleting ? -1 : 1;
-  let speed = deleting ? 28 : 62;
-  if (!deleting && cIdx === phrase.length) { speed = 1500; deleting = true; }
-  else if (deleting && cIdx === 0) { deleting = false; rIdx = (rIdx + 1) % roles.length; speed = 350; }
-  setTimeout(typeRole, speed);
-}
-typeRole();
-
-// ── Scroll reveal ──
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-}, { threshold: 0.1 });
-reveals.forEach(r => io.observe(r));
-
-// ── Scrollspy (desktop + mobile nav) ──
-const sections = document.querySelectorAll('main section[id]');
-const sideLinks = document.querySelectorAll('.side-nav a, .mobile-bar a');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(sec => { if (window.scrollY >= sec.offsetTop - 200) current = sec.id; });
-  sideLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
-}, { passive: true });
-
-// ── Copy email ──
-function copyEmail() {
-  navigator.clipboard.writeText("darlingtonerzuah@gmail.com").then(() => {
-    const toast = document.getElementById('toast');
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2600);
-  }).catch(() => {});
-}
-
-// ── Sparkline: candlestick + trend line signature (theme-aware) ──
-const sparkSeries = (function () {
-  const N = 46;
-  let series = [];
-  let base = 70;
-  for (let i = 0; i < N; i++) {
-    base += (Math.random() - 0.48) * 9;
-    base = Math.max(20, Math.min(120, base));
-    const open = base;
-    const close = base + (Math.random() - 0.5) * 10;
-    const hi = Math.max(open, close) + Math.random() * 5;
-    const lo = Math.min(open, close) - Math.random() * 5;
-    series.push({ open, close, hi, lo });
-    base = close;
-  }
-  return series;
-})();
-
-function renderSparkline(animate) {
-  const svg = document.getElementById('sparkline');
-  if (!svg) return;
-  const ns = 'http://www.w3.org/2000/svg';
-  const W = 700, H = 140;
-  const series = sparkSeries;
-  const step = W / series.length;
-  const styles = getComputedStyle(root);
-  const upColor = styles.getPropertyValue('--up').trim();
-  const downColor = styles.getPropertyValue('--down').trim();
-  const accentA = styles.getPropertyValue('--accent-2').trim();
-  const accentB = styles.getPropertyValue('--accent').trim();
-
-  svg.innerHTML = '';
-
-  const defs = document.createElementNS(ns, 'defs');
-  const grad = document.createElementNS(ns, 'linearGradient');
-  grad.setAttribute('id', 'lineGrad');
-  grad.setAttribute('x1', '0'); grad.setAttribute('x2', '1'); grad.setAttribute('y1', '0'); grad.setAttribute('y2', '0');
-  grad.innerHTML = '<stop offset="0%" stop-color="' + accentA + '"/><stop offset="100%" stop-color="' + accentB + '"/>';
-  defs.appendChild(grad);
-  svg.appendChild(defs);
-
-  const candleGroup = document.createElementNS(ns, 'g');
-  svg.appendChild(candleGroup);
-
-  series.forEach((c, i) => {
-    const x = i * step + step / 2;
-    const up = c.close >= c.open;
-    const color = up ? upColor : downColor;
-    const wick = document.createElementNS(ns, 'line');
-    wick.setAttribute('x1', x); wick.setAttribute('x2', x);
-    wick.setAttribute('y1', H - c.hi); wick.setAttribute('y2', H - c.lo);
-    wick.setAttribute('stroke', color); wick.setAttribute('stroke-width', '1');
-    wick.setAttribute('opacity', '0.85');
-    candleGroup.appendChild(wick);
-
-    const body = document.createElementNS(ns, 'rect');
-    const yTop = H - Math.max(c.open, c.close);
-    const bh = Math.max(1.5, Math.abs(c.close - c.open));
-    body.setAttribute('x', x - step * 0.28);
-    body.setAttribute('y', yTop);
-    body.setAttribute('width', step * 0.56);
-    body.setAttribute('height', bh);
-    body.setAttribute('fill', color);
-    body.setAttribute('opacity', '0.85');
-    body.setAttribute('rx', '1');
-    candleGroup.appendChild(body);
-  });
-
-  let d = '';
-  series.forEach((c, i) => {
-    const x = i * step + step / 2;
-    const y = H - c.close;
-    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1) + ' ';
-  });
-  const path = document.createElementNS(ns, 'path');
-  path.setAttribute('d', d);
-  path.setAttribute('fill', 'none');
-  path.setAttribute('stroke', 'url(#lineGrad)');
-  path.setAttribute('stroke-width', '2');
-  path.setAttribute('stroke-linecap', 'round');
-  path.setAttribute('stroke-linejoin', 'round');
-  path.style.opacity = '0.9';
-  svg.appendChild(path);
-
-  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (animate && !prefersReduced) {
-    const len = path.getTotalLength();
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-    path.animate([{ strokeDashoffset: len }, { strokeDashoffset: 0 }], { duration: 1800, easing: 'cubic-bezier(0.16,1,0.3,1)', fill: 'forwards' });
-  }
-}
-
-// ── Theme toggle ──
-const root = document.documentElement;
-const toggles = document.querySelectorAll('.theme-toggle');
-function applyTheme(theme, animateChart) {
-  if (theme === 'dark') root.setAttribute('data-theme', 'dark');
-  else root.removeAttribute('data-theme');
-  toggles.forEach(t => {
-    t.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
-    t.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
-  });
-  document.querySelector('meta[name="theme-color"]').setAttribute('content', theme === 'dark' ? '#080b11' : '#f5f8fb');
-  renderSparkline(animateChart);
-}
-const savedTheme = localStorage.getItem('jd-theme');
-const initialTheme = savedTheme || 'light';
-applyTheme(initialTheme, true);
-toggles.forEach(t => t.addEventListener('click', () => {
-  const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('jd-theme', next);
-  applyTheme(next, false);
-}));
-</script>
+  <script src="/script.js"></script>
 </body>
 </html>
