@@ -218,13 +218,16 @@ img, video { display: block; max-width: 100%; }
 .menu-toggle span { display: block; height: 1px; width: 1rem; background: currentColor; }
 
 .nav-mobile {
-  display: flex;
+  /* Keep hidden by default; the [hidden] attribute should control visibility. */
+  display: none;
   flex-direction: column;
   border-top: 1px solid var(--hairline);
   background: rgba(23, 25, 31, 0.95);
   backdrop-filter: blur(20px);
   padding: 1rem 1.5rem;
 }
+/* Show the mobile nav only when it is not hidden (so the hidden attribute works as expected) */
+.nav-mobile:not([hidden]) { display: flex; }
 @media (min-width: 768px) { .nav-mobile { display: none !important; } }
 .nav-mobile a {
   padding: 0.65rem 0;
