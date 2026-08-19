@@ -218,17 +218,26 @@ img, video { display: block; max-width: 100%; }
 .menu-toggle span { display: block; height: 1px; width: 1rem; background: currentColor; }
 
 .nav-mobile {
-  /* Keep hidden by default; the [hidden] attribute should control visibility. */
-  display: none;
+  /* Always hidden by default; only shown when [hidden] attribute is removed via JS. */
+  display: none !important;
   flex-direction: column;
   border-top: 1px solid var(--hairline);
   background: rgba(23, 25, 31, 0.95);
   backdrop-filter: blur(20px);
   padding: 1rem 1.5rem;
+  overflow: hidden;
 }
-/* Show the mobile nav only when it is not hidden (so the hidden attribute works as expected) */
-.nav-mobile:not([hidden]) { display: flex; }
+/* Show and animate when [hidden] is removed by JS */
+.nav-mobile:not([hidden]) {
+  display: flex !important;
+  animation: slideDown 0.25s var(--ease-out-expo);
+}
 @media (min-width: 768px) { .nav-mobile { display: none !important; } }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .nav-mobile a {
   padding: 0.65rem 0;
   font-size: 0.875rem;
